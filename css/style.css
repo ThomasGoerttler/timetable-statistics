@@ -1,0 +1,98 @@
+
+h1 {
+  font-size: 2em;
+  font-weight: bold;
+  color: #ffffff;
+  margin: 0px auto;
+  padding-top: 10px;
+  width: 705px;
+ // text-align: center;
+}
+
+html {
+	height: 100%;
+}
+
+body {
+	margin: 0px !important;
+	background-image: url('http://cms.rolandus.com/assets/images/products/gallery/v-piano_grand_angle_open_half_gal.jpg');
+	background-repeat: repeat;
+	background-attachment: fixed;
+	background-position-x: 50%;
+	font-family: 'Nunito', sans-serif;
+	height: 100%;
+}
+#shadow {
+	background: rgba(181,227,196,0.8);
+	min-height: 100%;
+	padding-bottom: 30px;
+}
+
+#headerwrap{
+	background-color: #0aa33d;
+	width: 100%;
+	height: 60px;
+}
+
+#main {
+  	width: 705px;
+	margin: 40px auto 50px;
+}
+
+.image {
+	margin: 20px;
+	font-size: 44px;
+	padding-top: 8px;
+	font-weight: bold;
+	border-style: none;
+	font-family:Courier;
+	color: white;
+	background-image: url(../images/back.png);
+	width: 100px;
+	height: 60px;
+	float: left;
+	text-align: center;
+}
+.image:hover{
+
+	background-image: url(../images/back_hover.png);
+}
+
+.text {
+	height: 60px;
+	padding: 20px;
+	padding-left: 150px;
+}
+
+.title {
+	margin: 0px 0;
+	font-size: 16px;
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+a {
+	color: #0aa33d;
+	text-decoration: none;
+	border-bottom: 1px dotted #0aa33d;
+}
+a:hover {
+	border-bottom: 1px solid #0aa33d;
+}
+
+.info {
+	margin: 0px 0;
+	font-size: 12px;
+	font-style: italic;
+	margin-bottom: 3px;
+}
+.parts {
+	margin: 0px 0;
+	font-size: 12px;
+}
+.element {
+	width: 705px;
+	margin: 15px 0px;
+	height: 100px;
+	
+	background-color: white;
+}
