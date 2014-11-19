@@ -15,13 +15,26 @@ html {
 
 body {
 	margin: 0px !important;
-	background-image: url('http://cms.rolandus.com/assets/images/products/gallery/v-piano_grand_angle_open_half_gal.jpg');
+	background-image: url('http://upload.wikimedia.org/wikipedia/commons/3/37/Vorlesung_Uni_Aachen.JPG');
 	background-repeat: repeat;
 	background-attachment: fixed;
 	background-position-x: 50%;
 	font-family: 'Nunito', sans-serif;
 	height: 100%;
 }
+
+.hour {
+
+	height: 30px;
+	width: 50px;
+	position: absolute;
+	top: 80px;
+	color: white;
+	background-color: black;
+	text-align: center;
+
+}
+
 #shadow {
 	background: rgba(181,227,196,0.8);
 	min-height: 100%;
@@ -35,8 +48,9 @@ body {
 }
 
 #main {
-  	width: 705px;
+  	width: 1000px;
 	margin: 40px auto 50px;
+	position: relative;
 }
 
 .image {

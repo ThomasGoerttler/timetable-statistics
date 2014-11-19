@@ -1,30 +1,104 @@
-
+var heightOfOneHour = 30;
+var widthtOfOneHour = 150;
+var space = 10;
+var widthOfHourText = 50;
+var subjects;
+var alreadySomethingPlaced;
 
 jQuery(document).ready(
 function (){
 
-	scores = data.scores;
+	subjects = data.subjects;
+	alreadySomethingPlaced = {};
+	for(var i=8; i<=20; i++) {
+		createHourDescription(i);
+	}
 
-	for(var i=0;i<scores.length;i++){
-		var score = scores[i]
-		document.getElementById("main").appendChild(createScore(score));
+	for(var i=0;i<subjects.length;i++){
+		var subject = subjects[i];
+		createSubject(subject, subjects);
 	 }
-
    
 });
 
+function createHourDescription(i) {
+	var div = document.createElement("div");
+	div.style.height = heightOfOneHour + "px";
+	div.style.width = widthOfHourText + "px";
+	div.style.position ="absolute"
 
-function createScore(score) {
+	div.style.top = (i-8) * (heightOfOneHour + space )  + "px"
+	div.appendChild(document.createTextNode(i))  + "px"
+
+	div.style.backgroundColor = "black"
+	div.style.color = "white"
 	
-	var element = createDiv("element", null)
-	var image = createDiv("image", score.year)
-	var text = createText(score)
+	document.getElementById("main").appendChild(div);
 
-	element.appendChild(image)
-	element.appendChild(text)
-	return element
 }
 
+
+function createSubject(subject, subjects) {
+	
+	
+	
+	for(var i=0;i<subject.lectures.length;i++){
+		
+		checkSubject(subject.lectures[i]);
+
+		var div = document.createElement("div");
+		div.style.height = heightOfOneHour * 2 + space +"px";
+		div.style.width = widthtOfOneHour/checkSubject(subject.lectures[i])+"px";
+		div.style.position ="absolute"
+		var extra = 0;
+		
+		if(alreadySomethingPlaced[subject.lectures[i].day+subject.lectures[i].time]==1)
+			extra = widthtOfOneHour/checkSubject(subject.lectures[i]);
+		
+		div.style.left = extra + widthOfHourText + space + (subject.lectures[i].day-1) * (widthtOfOneHour+space) +  "px"; 
+		div.style.top = ((subject.lectures[i].time-8)) * (heightOfOneHour+space) +  "px"; 
+	
+		if(!subject.place.localeCompare("HU_WiWi"))
+			div.style.backgroundColor = "red";
+
+		if(!subject.place.localeCompare("TU"))
+			div.style.backgroundColor = "green";
+
+		if(!subject.place.localeCompare("FU"))
+			div.style.backgroundColor = "yellow";
+
+		if(!subject.place.localeCompare("HU_Mathe"))
+			div.style.backgroundColor = "blue";
+
+	
+		div.appendChild(document.createTextNode(subject.name))
+	
+
+		document.getElementById("main").appendChild(div);
+		
+		if(checkSubject(subject.lectures[i])> 1)
+			alreadySomethingPlaced[subject.lectures[i].day+subject.lectures[i].time] = 1;
+	}
+}
+
+// Checks how many other lectures are on t
+function checkSubject (lecture) {
+	var onTheSameTime = 0;
+	for(var i=0;i<subjects.length;i++){
+		for(var j=0;j<subjects[i].lectures.length;j++){
+			if(lecture.day == subjects[i].lectures[j].day && Math.abs(lecture.time - subjects[i].lectures[j].time)<2) {
+				onTheSameTime++;
+				
+			}
+		
+		}
+	}
+	return onTheSameTime
+}
+
+function createLecture(subject, iterator) {
+	
+}
 function createDiv(cssClass, content) {
 	var div = document.createElement("div");
 	div.setAttribute("class", cssClass);
