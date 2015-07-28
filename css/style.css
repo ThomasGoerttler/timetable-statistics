@@ -1,3 +1,45 @@
+html {
+	height: 100%;
+  font-family: 'Ubuntu',Tahoma,sans-serif;
+}
+
+body {
+	margin: 0px !important;
+	background-repeat: repeat;
+	background-attachment: fixed;
+	background-position-x: 50%;
+	font-family: 'Nunito', sans-serif;
+  font-family: 'Ubuntu',Tahoma,sans-serif;
+	font-family: 'Lato', sans-serif;
+	color: #3f3f3f;
+	
+}
+
+#headerwrap{
+	background-color: #3f3f3f;;
+	width: 100%;
+	height: 60px;
+}
+
+#main{
+	display:block;
+}
+
+#timetablewrapper {
+  width: 1200px;
+	margin: 40px auto 50px;
+	position: relative;
+	background-color: black;
+	
+}
+
+#selectionarea {
+  width: 1200px;
+	margin: 40px auto 50px;
+	position: relative;
+	height: 100%;
+}
+
 
 h1 {
   font-size: 2em;
@@ -5,108 +47,88 @@ h1 {
   color: #ffffff;
   margin: 0px auto;
   padding-top: 10px;
-  width: 705px;
- // text-align: center;
-}
-
-html {
-	height: 100%;
-}
-
-body {
-	margin: 0px !important;
-	background-image: url('http://upload.wikimedia.org/wikipedia/commons/3/37/Vorlesung_Uni_Aachen.JPG');
-	background-repeat: repeat;
-	background-attachment: fixed;
-	background-position-x: 50%;
-	font-family: 'Nunito', sans-serif;
-	height: 100%;
+  text-align: center;
+  min-width: 1200px;
 }
 
 .hour {
-
-	height: 30px;
-	width: 50px;
 	position: absolute;
-	top: 80px;
+	padding-top: 5px;
+	padding-right: 10px;
+	text-align: right;
+}
+
+.weekday {
+	position: absolute;
+	height: 50px;
+	background-color: #e8e8e8;
+	top: 0px;
+  text-align: center;
+	padding-top: 20px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.line {
+	position: absolute;
+	background-color: #E2E2E2;
+}
+
+.lecture {
+	position: absolute;
+	padding: 2px;
+	overflow: hidden;
 	color: white;
-	background-color: black;
-	text-align: center;
-
-}
-
-#shadow {
-	background: rgba(181,227,196,0.8);
-	min-height: 100%;
-	padding-bottom: 30px;
-}
-
-#headerwrap{
-	background-color: #0aa33d;
-	width: 100%;
-	height: 60px;
-}
-
-#main {
-  	width: 1000px;
-	margin: 40px auto 50px;
-	position: relative;
-}
-
-.image {
-	margin: 20px;
-	font-size: 44px;
-	padding-top: 8px;
-	font-weight: bold;
-	border-style: none;
-	font-family:Courier;
-	color: white;
-	background-image: url(../images/back.png);
-	width: 100px;
-	height: 60px;
-	float: left;
-	text-align: center;
-}
-.image:hover{
-
-	background-image: url(../images/back_hover.png);
-}
-
-.text {
-	height: 60px;
-	padding: 20px;
-	padding-left: 150px;
-}
-
-.title {
-	margin: 0px 0;
-	font-size: 16px;
-	font-weight: bold;
-	margin-bottom: 5px;
-}
-a {
-	color: #0aa33d;
-	text-decoration: none;
-	border-bottom: 1px dotted #0aa33d;
-}
-a:hover {
-	border-bottom: 1px solid #0aa33d;
-}
-
-.info {
-	margin: 0px 0;
 	font-size: 12px;
-	font-style: italic;
-	margin-bottom: 3px;
+	word-wrap: normal;
 }
-.parts {
-	margin: 0px 0;
-	font-size: 12px;
+
+#TU{
+	background-color: #DEB196;
 }
-.element {
-	width: 705px;
-	margin: 15px 0px;
-	height: 100px;
-	
-	background-color: white;
+
+#TU:hover{
+	background-color: #e7c8b5;
 }
+
+#HU_WiWi{
+	background-color: #4EB2C1;
+}
+
+#HU_WiWi:hover{
+	background-color: #83c9d3;
+}
+
+#FU{
+	background-color: #7A64B2;
+}
+
+#FU:hover{
+	background-color: #a192c9;
+}
+
+#HU_Mathe{
+	background-color: #EFBB26;
+}
+
+#HU_Mathe:hover{
+	background-color: #f3ca57;
+}
+
+#Charite{
+	background-color: #CB282C;	
+}
+
+#Charite:hover{
+	background-color: #da686b;	
+}
+
+#WIAS{
+	background-color: #3AA76A;
+}
+
+#WIAS:hover{
+	background-color: #75c196;
+}
+
+
