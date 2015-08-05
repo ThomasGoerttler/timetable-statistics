@@ -71,7 +71,9 @@ function insertIn(dayColumn, lecture, subject) {
 			"subject" : subject,
 			"lecture" : lecture
 		}
-		dayColumn[""+(lecture.startTime+1)] = "notNull"
+		for (var i=1; i < lecture.duration; i++) {
+			dayColumn[""+(lecture.startTime+i)] = "notNull"
+		}
 		return true
 	}
 	

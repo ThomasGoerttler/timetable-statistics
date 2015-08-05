@@ -1,17 +1,17 @@
 var heightOfOneHour = 40
 var heightOfWeekday = 70
 var widthtOfOneHour = 250
-var width = 1150 // 1200 - width of hour
+var width = 1100 // 1200 - width of hour
 var space = 1
 var widthOfHourText = 50
 var subjects
 
 jQuery(document).ready(
 	function() {
-		refresh(true)
+		refresh()
 	});
 	
-function refresh(noCheckboxes) {
+function refresh() {
 
 
 	$('#selectionarea').empty()
@@ -19,34 +19,46 @@ function refresh(noCheckboxes) {
 	subjects = data.subjects;
 	var timetableModel = createNewTimetable(subjects)
 	showSelectionArea()
-	createVerticalLinesAndHourDescription();
+	createHorizontalLinesAndHourDescription();
 	showTimetable(timetableModel)
 	
 }
 
-function createVerticalLinesAndHourDescription() {
+function createHorizontalLinesAndHourDescription() {
 	for (var i = 0; i <= 12; i++) {
 		
-		//vertikal line
-		var line = createDiv("line")
-		line.style.height = space + "px"
-		line.style.width = width + "px"
-		line.style.top = heightOfWeekday + i * (heightOfOneHour) + (i-1) * space + "px"
-		line.style.left = widthOfHourText + "px"
-		document.getElementById("timetablewrapper").appendChild(line);
+		//horizontal line
+		var horizontalLine = createDiv("line")
+		horizontalLine.style.height = space + "px"
+		horizontalLine.style.width = width + "px"
+		horizontalLine.style.top = heightOfWeekday + i * (heightOfOneHour) + (i-1) * space + "px"
+		horizontalLine.style.left = widthOfHourText + "px"
+		document.getElementById("timetablewrapper").appendChild(horizontalLine);
 
+		// Maybe
+		var time = i+8
+		var timeString = ""
+		if(time > 12)
+			timeString = time - 12 + " pm"
+		else
+			timeString = time + " am"
+				
 		// Hour description TODO can be refactored and made better
-		var div = createDiv("hour")
-		div.style.height = heightOfOneHour + "px";
-		div.style.width = widthOfHourText -10 + "px";
-		div.style.top = heightOfWeekday + (i -0.5) * (heightOfOneHour + space) + "px"
-
-		var textDiv = document.createElement("div");
-		textDiv.appendChild(document.createTextNode(i+8));
-		textDiv.style.margin = "5px"
-		div.appendChild(textDiv);
-
-		document.getElementById("timetablewrapper").appendChild(div)
+		var hour = createDiv("hour")
+		hour.style.height = heightOfOneHour + "px";
+		hour.style.width = widthOfHourText + "px";
+		hour.style.top = heightOfWeekday + (i -0.5) * (heightOfOneHour + space) + "px"
+		hour.appendChild(document.createTextNode(time));
+		document.getElementById("timetablewrapper").appendChild(hour)
+		
+		var hourEnd = createDiv("hour")
+		hourEnd.style.height = heightOfOneHour + "px";
+		hourEnd.style.width = widthOfHourText + "px";
+		hourEnd.style.left = 50 + width + "px"
+		hourEnd.style.top = heightOfWeekday + (i -0.5) * (heightOfOneHour + space) + "px"
+		hourEnd.appendChild(document.createTextNode(time));
+		document.getElementById("timetablewrapper").appendChild(hourEnd)
+		
 	}
 }
 
@@ -57,13 +69,13 @@ function showTimetable(timetable) {
 	
 	var containerDiv = document.getElementById("timetablewrapper")
 
-	// First horizontal Line
-	var horizontalLine = createDiv("line")
-	horizontalLine.style.width = space + "px"
-	horizontalLine.style.height = 12 * (heightOfOneHour + space) + "px"
-	horizontalLine.style.top = heightOfWeekday + "px"
-	horizontalLine.style.left = widthOfHourText + "px"
-	containerDiv.appendChild(horizontalLine);
+	// First vertical Line
+	var verticalLine = createDiv("line")
+	verticalLine.style.width = space + "px"
+	verticalLine.style.height = 12 * (heightOfOneHour + space) + "px"
+	verticalLine.style.top = heightOfWeekday + "px"
+	verticalLine.style.left = widthOfHourText + "px"
+	containerDiv.appendChild(verticalLine);
 	
 	var columnNumber = 0 // Iterator over the day columns.
 	
@@ -81,27 +93,95 @@ function showTimetable(timetable) {
 			dayColumn.forEach(function(hour) {
 				if(hour != null && hour !== "notNull") {
 					var lecture = createDiv("lecture")
-					lecture.style.height = heightOfOneHour * 2 + space - 4 +"px" // - 4 for padding
-					lecture.style.width = width/timetable.columns - space - 4 + "px" // 4 for padding
+					var lectureWidth = width/timetable.columns - space - 4
+					
+					lecture.style.height = heightOfOneHour * hour.lecture.duration + (hour.lecture.duration - 1) * space - 4 +"px" // - 4 for padding
+					lecture.style.width = lectureWidth + "px" // 4 for padding
 					lecture.style.left = widthOfHourText + space + columnNumber * (width/timetable.columns )+  "px"
 					lecture.style.top = heightOfWeekday + (hour.lecture.startTime-8) * (heightOfOneHour+space) + "px"
 					lecture.setAttribute("id", hour.subject.university)
-					lecture.appendChild(document.createTextNode(hour.subject.name))
+					
+					// Title
+					var title = createDiv("title")
+					title.appendChild(document.createTextNode( stringTillEnd(hour.subject.name, (lectureWidth-20)/6) ))
+					lecture.appendChild(title)
+					
+					// Lecturer
+					var lecturer = createDiv("lecturer")
+					lecturer.appendChild(document.createTextNode( stringTillEnd(hour.subject.lecturer, (lectureWidth-20)/5) ))
+					lecture.appendChild(lecturer)
+					
+					// Room number
+					var room = createDiv("lecturer")
+					room.appendChild(document.createTextNode( stringTillEnd(hour.lecture.room, (lectureWidth-20)/5) ))
+					lecture.appendChild(room)
+					
+					
+					if(lectureWidth > 85) {
+						//Icon Container 
+						var iconContainer = createDiv("iconContainer")
+					
+						//credits
+						var credits = createDiv("credits")
+						if(hour.subject.sp !== "-1")
+							credits.appendChild(document.createTextNode(hour.subject.sp))
+						else
+							credits.appendChild(document.createTextNode(10))
+						iconContainer.appendChild(credits)
+					
+					
+						//Type of the lecutre
+						var type = createDiv("lectureType")
+						type.appendChild(document.createTextNode(hour.lecture.type.substr(0,2)))
+						iconContainer.appendChild(type)
+					
+						// maybe text
+						var spacer = createDiv("spacer")
+						spacer.style.width = lectureWidth - 4 * 20.5 + "px"
+						if (hour.lecture.hasAlternative)
+							spacer.appendChild(document.createTextNode("! "))
+						iconContainer.appendChild(spacer)
+					
+						//weekly
+						var weekly = createDiv("oneWeek")
+						if (hour.subject.twoWeeks)
+							weekly.className = "twoWeek"
+						iconContainer.appendChild(weekly)
+					
+						// Language
+						var language = createDiv("germanImage")
+						if (hour.subject.language === "english")
+							language.className = "englishImage"
+						iconContainer.appendChild(language)
+						
+
+						lecture.appendChild(iconContainer)
+					}
+					
+					console.log(hour)
 					containerDiv.appendChild(lecture);
 				}
 			})
 			
-			// Horizontal Line after Day Column
-			var horizontalLine = createDiv("line")
-			horizontalLine.style.width = space + "px"
-			horizontalLine.style.height = 12 * (heightOfOneHour + space) + "px"
-			horizontalLine.style.top = heightOfWeekday + "px"
-			horizontalLine.style.left = widthOfHourText + (columnNumber + 1) * (width/timetable.columns )+ "px"
-			containerDiv.appendChild(horizontalLine);
+			// Vertical Line after Day Column
+			var verticalLine = createDiv("line")
+			verticalLine.style.width = space + "px"
+			verticalLine.style.height = 12 * (heightOfOneHour + space) + "px"
+			verticalLine.style.top = heightOfWeekday + "px"
+			verticalLine.style.left = widthOfHourText + (columnNumber + 1) * (width/timetable.columns )+ "px"
+			containerDiv.appendChild(verticalLine);
 			
 			columnNumber += 1
 		})
 	})
+}
+
+function stringTillEnd(text, count) {
+	if (text.length <= count)
+		return text
+	var newText = text.substr(0,count-3)
+	newText += "..."
+	return newText
 }
 
 function createDiv(cssClass) {
@@ -128,7 +208,7 @@ function setSubjectsCheckbox() {
 		if(category.sub == undefined) {
 		// No subcategories exist, so this is a own category
 			subjects.forEach(function(subject) {
-				if (category.timetablewrapper == subject.category)
+				if (category.main == subject.category)
 					timetablewrapperCategoryArea += createCheckboxEntry(subject);
 			});
 		} else {
@@ -149,10 +229,9 @@ function setSubjectsCheckbox() {
     console.log("cat area: " + timetablewrapperCategoryArea)
     if (timetablewrapperCategoryArea != "") {
       
-      timetablewrapperCategoryArea = '<h3>' + category.timetablewrapper + '</h3>' + timetablewrapperCategoryArea
+      timetablewrapperCategoryArea = '<h3>' + category.main + '</h3>' + timetablewrapperCategoryArea
       $('#selectionarea').append(timetablewrapperCategoryArea)
 			console.log(document.getElementById("timetablewrapper"))
-	//		document.getElementById("timetablewrapper").appendChild(timetablewrapperCategoryArea)
     }
   })
   
@@ -165,8 +244,11 @@ function setSubjectsCheckbox() {
 
 function createCheckboxEntry(subject) {
 	var string = '<input class="subjectsCheckbox" id="' + subject.name 
-		+ '"type="checkbox" value=' + subject.taken + ' ' + checked(subject.taken) 
-		+ '> ' + subject.name + " (" + subject.sp + "LP)" + '</input> </br>'
+		+ '"type="checkbox" value=' + subject.taken + ' ' 
+		+ checked(subject.taken) + '> ' 
+		+ subject.name 
+		+ " (" + subject.sp + " SP)" 
+		+ '</input> </br>'
 
 	return string;
 }

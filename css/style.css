@@ -12,6 +12,7 @@ body {
   font-family: 'Ubuntu',Tahoma,sans-serif;
 	font-family: 'Lato', sans-serif;
 	color: #3f3f3f;
+	font-size: 13px;
 	
 }
 
@@ -29,16 +30,27 @@ body {
   width: 1200px;
 	margin: 40px auto 50px;
 	position: relative;
-	background-color: black;
+	height: 570px;
 	
 }
 
 #selectionarea {
-  width: 1200px;
+  width: 1100px;
 	margin: 40px auto 50px;
 	position: relative;
 	height: 100%;
 }
+
+
+#footerwrapper{
+	background-color: #3f3f3f;;
+	width: 100%;
+	color: white;
+	height: 60px;
+	text-align: center;
+	padding-top: 20px;
+}
+
 
 
 h1 {
@@ -53,9 +65,8 @@ h1 {
 
 .hour {
 	position: absolute;
-	padding-top: 5px;
-	padding-right: 10px;
-	text-align: right;
+	padding-top: 10px;
+	text-align: center;
 }
 
 .weekday {
@@ -81,6 +92,89 @@ h1 {
 	color: white;
 	font-size: 12px;
 	word-wrap: normal;
+}
+
+.title {
+	font-size: 14px;
+	height: 15px;
+	text-align: center;
+	margin-top: 5px;
+}
+
+.lecturer {
+	height: 15px;
+	text-align: center;
+	margin-top: 3px;
+}
+
+.iconContainer {
+	height: 18px;
+	margin-top: 3px;
+}
+
+.englishImage {
+	height: 18px;
+	width: 18px;
+	background-image: url("../img/englishBlack.png");
+	background-size: contain;
+	float: left;
+}
+
+
+.germanImage {
+	height: 18px;
+	width: 18px;
+	background-image: url("../img/germanBlack.png");
+	background-size: contain;
+	float: left;
+}
+
+.oneWeek {
+	height: 18px;
+	width: 18px;
+	background-image: url("../img/week.png");
+	background-size: contain;
+	float: left;
+	margin-right: 3px;
+}
+
+
+
+.twoWeek {
+	height: 18px;
+	width: 18px;
+	background-image: url("../img/twoweek.png");
+	background-size: contain;
+	float: left;
+	margin-right: 3px;
+}
+
+.lectureType {
+	height: 16px;
+	width: 18px;
+	float: left;
+	text-align: center;
+	font-weight: bold;
+	padding-top: 2px;
+}
+
+.credits {
+	height: 14px;
+	width: 14px;
+	float: left;
+	margin-right: 3px;
+	text-align: center;
+	font-weight: bold;
+	border-style: dotted;
+	border-radius: 15px;
+	font-size: 11px;
+}
+.spacer {
+	height: 14px;
+	float: left;
+	text-align: center;
+	overflow: hidden;
+	
 }
 
 #TU{
