@@ -6,6 +6,8 @@ var space = 1
 var widthOfHourText = 50
 var subjects
 
+var start = true
+
 jQuery(document).ready(
 	function() {
 		refresh()
@@ -13,10 +15,20 @@ jQuery(document).ready(
 	
 function refresh() {
 
-
 	$('#selectionarea').empty()
 	$('#timetablewrapper').empty()
-	subjects = data.subjects;
+	subjects = data.subjects
+	
+	// Just for testing
+	if (start) { 		
+		for (var i = 0; i < subjects.length; i++) {
+			if (Math.random() < 0.75) {
+				subjects[i].taken = false
+			}
+		}
+		start = false
+	}
+	
 	var timetableModel = createNewTimetable(subjects)
 	showSelectionArea()
 	createHorizontalLinesAndHourDescription();
@@ -132,7 +144,7 @@ function showTimetable(timetable) {
 					
 						//Type of the lecutre
 						var type = createDiv("lectureType")
-						type.appendChild(document.createTextNode(hour.lecture.type.substr(0,2)))
+						type.appendChild(document.createTextNode(hour.lecture.type))
 						iconContainer.appendChild(type)
 					
 						// maybe text
@@ -254,8 +266,10 @@ function createCheckboxEntry(subject) {
 }
 
 function checked(bool) {
-  if (bool)
-    return "checked"
+	if (bool)
+		return "checked"
+	else
+		return ""
 }
 
 function setTaken(id, bool) {

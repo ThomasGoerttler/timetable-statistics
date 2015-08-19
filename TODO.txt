@@ -11,8 +11,4 @@
 - wahlbereich not working
 - zu viele fächer 
 	-> menü icon
-	
-	
-	
-	
-	- Methoden der Statistik unterschiedlich
+- Hover Coler von Rot is schlecht

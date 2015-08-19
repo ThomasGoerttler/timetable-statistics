@@ -63,6 +63,16 @@ h1 {
   min-width: 1200px;
 }
 
+h3 {
+	margin-top: 7px;
+	margin-bottom: 10px;
+}
+
+h5 {
+	margin-top: 7px;
+	margin-bottom: 9px;
+}
+
 .hour {
 	position: absolute;
 	padding-top: 10px;
@@ -155,7 +165,8 @@ h1 {
 	float: left;
 	text-align: center;
 	font-weight: bold;
-	padding-top: 2px;
+	padding-top: 3px;
+	font-size: 10px;
 }
 
 .credits {
@@ -201,9 +212,20 @@ h1 {
 	background-color: #a192c9;
 }
 
+#HU_Lebenswissenschaften{
+	background-color: #D56272;
+}
+
+#HU_Lebenswissenschaften:hover{
+	background-color: #E97668;
+}
+
+
 #HU_Mathe{
 	background-color: #EFBB26;
 }
+
+
 
 #HU_Mathe:hover{
 	background-color: #f3ca57;
