@@ -11,11 +11,14 @@ var start = true
 jQuery(document).ready(
 	function() {
 		refresh()
+		$( document ).tooltip();
 	});
 	
 function refresh() {
 
-	$('#selectionarea').empty()
+	$('#selectionarea1').empty()
+	$('#selectionarea2').empty()
+	$('#selectionarea3').empty()
 	$('#timetablewrapper').empty()
 	subjects = data.subjects
 	
@@ -91,6 +94,10 @@ function showTimetable(timetable) {
 	
 	var columnNumber = 0 // Iterator over the day columns.
 	
+	var creditsSum = createDiv("creditsSum")
+	creditsSum.appendChild(document.createTextNode(timetable.creditSum + " SP"))
+	containerDiv.appendChild(creditsSum)
+	
 	timetable.weekdays.forEach(function(weekday) {
 		
 		var weekdayDiv = createDiv("weekday")
@@ -99,6 +106,9 @@ function showTimetable(timetable) {
 		weekdayDiv.appendChild(document.createTextNode(weekday.name))
 		containerDiv.appendChild(weekdayDiv);
 		
+
+		
+		
 		weekday.dayColumns.forEach(function(dayColumn) {
 			
 			// Each lecture in the day column
@@ -106,6 +116,19 @@ function showTimetable(timetable) {
 				if(hour != null && hour !== "notNull") {
 					var lecture = createDiv("lecture")
 					var lectureWidth = width/timetable.columns - space - 4
+					lecture.title = "Name: " + hour.subject.name + "\n"
+						+ "Uni: " + hour.subject.university + "\n"
+						+ "Address: " + hour.subject.address + "\n"
+						+ "Lecturer: " + hour.subject.lecturer + "\n"
+						+ "category: " + hour.subject.category  + "\n"
+					
+					
+						+ "Room: " + hour.lecture.room  + "\n"
+						+ "SP: " + hour.subject.sp + "\n"
+						+ "Type: " + hour.lecture.type + "\n"
+						+ "annotation: " + hour.subject.annotation + "\n"
+						+ "language: " + hour.subject.language + "\n"
+						+ "has an alternative date: " + hour.subject.hasAlternative + "\n"
 					
 					lecture.style.height = heightOfOneHour * hour.lecture.duration + (hour.lecture.duration - 1) * space - 4 +"px" // - 4 for padding
 					lecture.style.width = lectureWidth + "px" // 4 for padding
@@ -116,6 +139,9 @@ function showTimetable(timetable) {
 					// Title
 					var title = createDiv("title")
 					title.appendChild(document.createTextNode( stringTillEnd(hour.subject.name, (lectureWidth-20)/6) ))
+
+					if (hour.lecture.duration == "4")
+						title.style.marginTop = "48px"
 					lecture.appendChild(title)
 					
 					// Lecturer
@@ -132,13 +158,16 @@ function showTimetable(timetable) {
 					if(lectureWidth > 85) {
 						//Icon Container 
 						var iconContainer = createDiv("iconContainer")
+
+						if (hour.lecture.duration == "4")
+							iconContainer.style.marginTop = "41px"
 					
 						//credits
 						var credits = createDiv("credits")
 						if(hour.subject.sp !== "-1")
 							credits.appendChild(document.createTextNode(hour.subject.sp))
 						else
-							credits.appendChild(document.createTextNode(10))
+							credits.appendChild(document.createTextNode("?"))
 						iconContainer.appendChild(credits)
 					
 					
@@ -213,8 +242,9 @@ function setSubjectsCheckbox() {
 	categories = data.categories
 
 	console.log(categories)
-	
+	var column = 1
 	categories.forEach( function(category){
+
 		var timetablewrapperCategoryArea = "";
 		
 		if(category.sub == undefined) {
@@ -242,9 +272,11 @@ function setSubjectsCheckbox() {
     if (timetablewrapperCategoryArea != "") {
       
       timetablewrapperCategoryArea = '<h3>' + category.main + '</h3>' + timetablewrapperCategoryArea
-      $('#selectionarea').append(timetablewrapperCategoryArea)
+      $('#selectionarea' + column).append(timetablewrapperCategoryArea)
 			console.log(document.getElementById("timetablewrapper"))
     }
+		if (category.break)
+			column++
   })
   
   
@@ -255,11 +287,14 @@ function setSubjectsCheckbox() {
 }
 
 function createCheckboxEntry(subject) {
+	var credits = "?"
+	if (subject.sp != -1)
+		credits = subject.sp;
 	var string = '<input class="subjectsCheckbox" id="' + subject.name 
 		+ '"type="checkbox" value=' + subject.taken + ' ' 
 		+ checked(subject.taken) + '> ' 
 		+ subject.name 
-		+ " (" + subject.sp + " SP)" 
+		+ " (" + credits + " SP)" 
 		+ '</input> </br>'
 
 	return string;

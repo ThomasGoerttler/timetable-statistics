@@ -39,6 +39,7 @@ body {
 	margin: 40px auto 50px;
 	position: relative;
 	height: 100%;
+	min-height: 450px;
 }
 
 
@@ -51,8 +52,15 @@ body {
 	padding-top: 20px;
 }
 
+.selectionSubArea{
+	width: 356px;
+	padding-right: 10px;
+	height: 100px;
+	color:black;
+	float: left;
+}
 
-
+ 
 h1 {
   font-size: 2em;
   font-weight: bold;
@@ -71,6 +79,18 @@ h3 {
 h5 {
 	margin-top: 7px;
 	margin-bottom: 9px;
+}
+
+.creditsSum {
+	position: absolute;
+	height: 32px;
+	width: 50px;
+	left: 1150px;
+	padding-top: 12px;
+	text-align: center;
+	background-color: #3f3f3f;
+	color: white;
+	font-weight: bold;
 }
 
 .hour {
@@ -161,7 +181,7 @@ h5 {
 
 .lectureType {
 	height: 16px;
-	width: 18px;
+	width: 19px;
 	float: left;
 	text-align: center;
 	font-weight: bold;
@@ -217,7 +237,7 @@ h5 {
 }
 
 #HU_Lebenswissenschaften:hover{
-	background-color: #E97668;
+	background-color: #DF8995;
 }
 
 

@@ -18,7 +18,8 @@ function createNewTimetable(subjects) {
 				"name" : "Friday"
 			}
 		],
-		"columns" : 0
+		"columns" : 0,
+		"creditSum" : 0
 	}
 	// Each array gets a starting new Day Column which is empty
 	timetable.weekdays.forEach(function(weekday) {
@@ -28,10 +29,13 @@ function createNewTimetable(subjects) {
 	
 	
 	// do the fucking iteration to the subjects
-	
+
+	var creditSum = 0
 	subjects.forEach(function(subject) {
 		if (subject.taken) {
-			
+			if (Number(subject.sp) !== -1)
+				creditSum += Number(subject.sp)
+			if (subject.sp !== -1)
 			subject.lectures.forEach(function(lecture) {
 				var weekdayOfLecture = timetable.weekdays[getDay(lecture.day) - 1]
 				var dayColumns = weekdayOfLecture.dayColumns
@@ -52,6 +56,8 @@ function createNewTimetable(subjects) {
 				
 			});
 		}
+
+		timetable.creditSum = creditSum
 	});
 	
 	// Calculate the count of columns
