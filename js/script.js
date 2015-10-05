@@ -64,7 +64,7 @@ function createHorizontalLinesAndHourDescription() {
 		document.getElementById("timetablewrapper").appendChild(horizontalLine);
 
 		// Maybe
-		var time = i+8
+		var time = i + 8
 		var timeString = ""
 		if(time > 12)
 			timeString = time - 12 + " pm"
@@ -75,7 +75,7 @@ function createHorizontalLinesAndHourDescription() {
 		var hour = createDiv("hour")
 		hour.style.height = heightOfOneHour + "px";
 		hour.style.width = widthOfHourText + "px";
-		hour.style.top = heightOfWeekday + (i -0.5) * (heightOfOneHour + space) + "px"
+		hour.style.top = heightOfWeekday + (i - 0.5) * (heightOfOneHour + space) + "px"
 		hour.appendChild(document.createTextNode(time));
 		document.getElementById("timetablewrapper").appendChild(hour)
 		
@@ -83,7 +83,7 @@ function createHorizontalLinesAndHourDescription() {
 		hourEnd.style.height = heightOfOneHour + "px";
 		hourEnd.style.width = widthOfHourText + "px";
 		hourEnd.style.left = 50 + width + "px"
-		hourEnd.style.top = heightOfWeekday + (i -0.5) * (heightOfOneHour + space) + "px"
+		hourEnd.style.top = heightOfWeekday + (i - 0.5) * (heightOfOneHour + space) + "px"
 		hourEnd.appendChild(document.createTextNode(time));
 		document.getElementById("timetablewrapper").appendChild(hourEnd)
 		
@@ -107,9 +107,21 @@ function showTimetable(timetable) {
 	
 	var columnNumber = 0 // Iterator over the day columns.
 	
-	var creditsSum = createDiv("creditsSum")
-	creditsSum.appendChild(document.createTextNode(timetable.creditSum + " SP"))
-	containerDiv.appendChild(creditsSum)
+  $("#creditsSum").text(timetable.creditSum + " SP")
+	
+	
+	$("#emptySelectionButton").click(function() {
+		console.log("Empty Click")
+		setAllSubjectsOn(false)
+		refresh(false);
+	})
+	
+	
+	$("#allSelectionButton").click(function() {
+		console.log("All Click")
+		setAllSubjectsOn(true)
+		refresh(false);
+	})
 	
 	timetable.weekdays.forEach(function(weekday) {
 		
@@ -136,8 +148,9 @@ function showTimetable(timetable) {
 						+ "SP: " + hour.subject.sp + "\n"
 						+ "Type: " + hour.lecture.type + "\n"
 						+ "annotation: " + hour.subject.annotation + "\n"
-						+ "language: " + hour.subject.language + "\n"
-						+ "has an alternative date: " + hour.subject.hasAlternative + "\n"
+						+ "language: " + hour.subject.language
+					if (hour.subject.hasAlternative)
+						lecture.title += "\nhas an alternative date:"
 					
 					lecture.style.height = heightOfOneHour * hour.lecture.duration + (hour.lecture.duration - 1) * space - 4 +"px" // - 4 for padding
 					lecture.style.width = lectureWidth + "px" // 4 for padding
@@ -354,6 +367,11 @@ function checked(bool) {
 		return ""
 }
 
+function setAllSubjectsOn(bool) {
+	for (subject in subjects) {
+		subjects[subject].taken = bool;
+	}
+}
 
 function setTaken(subjectName, bool) {
 	for (subject in subjects) {

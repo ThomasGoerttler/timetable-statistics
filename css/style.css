@@ -36,10 +36,17 @@ body {
 
 #selectionarea {
 	width: 1100px;
-	margin: 40px auto 50px;
+	margin: 20px auto 50px;
 	position: relative;
 	height: 100%;
 	min-height: 450px;
+}
+
+#multiSelectionarea {
+	width: 1100px;
+	margin: 30px auto 0px;
+	position: relative;
+	height: 30px;
 }
 
 
@@ -81,17 +88,43 @@ h5 {
 	margin-bottom: 9px;
 }
 
-.creditsSum {
-	position: absolute;
+
+#allSelectionButton {
 	height: 32px;
-	width: 50px;
-	left: 1100px;
-	top: -45px;
+	width: 120px;
 	padding-top: 12px;
+	text-align: center;
+	margin-left: 15px;
+	background-color: #3f3f3f;
+	color: white;
+	font-weight: bold;
+	float: left;
+	border-radius: 3px;
+}
+
+#emptySelectionButton {
+	height: 32px;
+	width: 120px;
+	padding-top: 12px;
+	
 	text-align: center;
 	background-color: #3f3f3f;
 	color: white;
 	font-weight: bold;
+	float: left;
+	border-radius: 3px;
+}
+
+#creditsSum {
+	height: 32px;
+	width: 70px;
+	padding-top: 12px;;
+	margin-left: 1030px;
+	text-align: center;
+	background-color: #3f3f3f;
+	color: white;
+	font-weight: bold;
+	border-radius: 3px;
 }
 
 .hour {
@@ -292,9 +325,16 @@ h5 {
 		margin-left: 2px;
     border-style: solid;
     border-width: 1px;
-    border-color: #4EB2C1;
 }
+/*
+.myCheckbox span:hover {
+    background: #4EB2C1
+} 
 
+.myCheckbox input:checked + span:hover {
+    background: white !important
+}
+*/
 .myCheckbox input:checked + span {
     background: #4EB2C1
 }
@@ -307,11 +347,11 @@ h5 {
     background: #DEB196
 }
 
-.myCheckbox span#HU_Wiwi_Span{
+.myCheckbox span#HU_WiWi_Span{
     border-color: #4EB2C1;
 }
 
-.myCheckbox input:checked + span#HU_Wiwi_Span{
+.myCheckbox input:checked + span#HU_WiWi_Span{
     background: #4EB2C1
 }
 
@@ -323,7 +363,6 @@ h5 {
     background: #7A64B2
 }
 
-
 .myCheckbox span#HU_Lebenswissenschaften_Span{
     border-color: #D56272;
 }
@@ -332,7 +371,6 @@ h5 {
     background: #D56272
 }
 
-
 .myCheckbox span#HU_Mathe_Span{
     border-color: #EFBB26;
 }
@@ -340,7 +378,6 @@ h5 {
 .myCheckbox input:checked + span#HU_Mathe_Span{
     background: #EFBB26
 }
-
 
 .myCheckbox span#Charite_Span{
     border-color: #CB282C;
