@@ -8,6 +8,8 @@ var subjects
 
 var start = true
 
+var savedSubjects
+
 jQuery(document).ready(
 	function() {
 		refresh()
@@ -24,9 +26,20 @@ function refresh() {
 	
 	// Just for testing
 	if (start) { 		
-		for (var i = 0; i < subjects.length; i++) {
+		/*for (var i = 0; i < subjects.length; i++) {
 			if (Math.random() < 0.75) {
 				subjects[i].taken = false
+			}
+		} */
+		savedSubjects = defaultSavedSubjects
+		for (var i = 0; i < subjects.length; i++) {
+			if (savedSubjects.subjects.indexOf(subjects[i].name) == -1) {
+				subjects[i].taken = false
+				console.log("False " +subjects[i].name)
+				console.log(savedSubjects.subjects)
+			} else {
+				subjects[i].taken = true
+				console.log("True " +subjects[i].name)
 			}
 		}
 		start = false
@@ -277,8 +290,27 @@ function createSelectionArea() {
 		console.log($(this).attr('id'))
 		console.log(this.checked)
 		setTaken($(this).attr('id'), this.checked)
-		refresh(false);
+		refresh();
 	});
+}
+
+
+/*
+* Update cookies
+*/
+function updateCookies (subject) {
+	
+	if (subject != null) {
+		var index = savedSubjects.subjects.indexOf(subject)
+		if (index == -1) {
+			savedSubjects.subjects.push(subject)
+		} else {
+			savedSubjects.subjects.splice(index, 1)
+		}
+	}
+	
+	// Update the 
+	
 }
 
 /*
