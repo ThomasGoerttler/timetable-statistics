@@ -35,7 +35,7 @@ body {
 }
 
 #selectionarea {
-  width: 1100px;
+	width: 1100px;
 	margin: 40px auto 50px;
 	position: relative;
 	height: 100%;
@@ -85,7 +85,8 @@ h5 {
 	position: absolute;
 	height: 32px;
 	width: 50px;
-	left: 1150px;
+	left: 1100px;
+	top: -45px;
 	padding-top: 12px;
 	text-align: center;
 	background-color: #3f3f3f;
@@ -113,6 +114,15 @@ h5 {
 .line {
 	position: absolute;
 	background-color: #E2E2E2;
+}
+
+.universitySquare {
+	width: 10px;
+	height: 10px;
+	float: left;
+	margin-top: 4px;
+	margin-right: 5px;
+	border-radius: 5px;
 }
 
 .lecture {
@@ -245,8 +255,6 @@ h5 {
 	background-color: #EFBB26;
 }
 
-
-
 #HU_Mathe:hover{
 	background-color: #f3ca57;
 }
@@ -268,3 +276,84 @@ h5 {
 }
 
 
+.myCheckbox input {
+    display: none;
+}
+
+.myCheckbox span {
+    width: 10px;
+    height: 10px;
+		border-radius: 2px;
+		float: left;
+    display: block;
+    background: white;
+		margin-right: 5px;
+		margin-top: 2px;
+		margin-left: 2px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #4EB2C1;
+}
+
+.myCheckbox input:checked + span {
+    background: #4EB2C1
+}
+
+.myCheckbox span#TU_Span{
+    border-color: #DEB196;
+}
+
+.myCheckbox input:checked + span#TU_Span{
+    background: #DEB196
+}
+
+.myCheckbox span#HU_Wiwi_Span{
+    border-color: #4EB2C1;
+}
+
+.myCheckbox input:checked + span#HU_Wiwi_Span{
+    background: #4EB2C1
+}
+
+.myCheckbox span#FU_Span{
+    border-color: #7A64B2;
+}
+
+.myCheckbox input:checked + span#FU_Span{
+    background: #7A64B2
+}
+
+
+.myCheckbox span#HU_Lebenswissenschaften_Span{
+    border-color: #D56272;
+}
+
+.myCheckbox input:checked + span#HU_Lebenswissenschaften_Span{
+    background: #D56272
+}
+
+
+.myCheckbox span#HU_Mathe_Span{
+    border-color: #EFBB26;
+}
+
+.myCheckbox input:checked + span#HU_Mathe_Span{
+    background: #EFBB26
+}
+
+
+.myCheckbox span#Charite_Span{
+    border-color: #CB282C;
+}
+
+.myCheckbox input:checked + span#Charite_Span{
+    background: #CB282C
+}
+
+.myCheckbox span#WIAS_Span{
+    border-color: #3AA76A;
+}
+
+.myCheckbox input:checked + span#WIAS_Span{
+    background: #3AA76A
+}

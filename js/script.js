@@ -106,9 +106,6 @@ function showTimetable(timetable) {
 		weekdayDiv.appendChild(document.createTextNode(weekday.name))
 		containerDiv.appendChild(weekdayDiv);
 		
-
-		
-		
 		weekday.dayColumns.forEach(function(dayColumn) {
 			
 			// Each lecture in the day column
@@ -121,7 +118,6 @@ function showTimetable(timetable) {
 						+ "Address: " + hour.subject.address + "\n"
 						+ "Lecturer: " + hour.subject.lecturer + "\n"
 						+ "category: " + hour.subject.category  + "\n"
-					
 					
 						+ "Room: " + hour.lecture.room  + "\n"
 						+ "SP: " + hour.subject.sp + "\n"
@@ -154,11 +150,10 @@ function showTimetable(timetable) {
 					room.appendChild(document.createTextNode( stringTillEnd(hour.lecture.room, (lectureWidth-20)/5) ))
 					lecture.appendChild(room)
 					
-					
 					if(lectureWidth > 85) {
 						//Icon Container 
 						var iconContainer = createDiv("iconContainer")
-
+						
 						if (hour.lecture.duration == "4")
 							iconContainer.style.marginTop = "41px"
 					
@@ -169,7 +164,6 @@ function showTimetable(timetable) {
 						else
 							credits.appendChild(document.createTextNode("?"))
 						iconContainer.appendChild(credits)
-					
 					
 						//Type of the lecutre
 						var type = createDiv("lectureType")
@@ -195,11 +189,10 @@ function showTimetable(timetable) {
 							language.className = "englishImage"
 						iconContainer.appendChild(language)
 						
-
 						lecture.appendChild(iconContainer)
 					}
 					
-					console.log(hour)
+					// console.log(hour)
 					containerDiv.appendChild(lecture);
 				}
 			})
@@ -233,16 +226,17 @@ function createDiv(cssClass) {
 
 
 function showSelectionArea() {
-	setSubjectsCheckbox()
+	createSelectionArea()
 }
 
-
-function setSubjectsCheckbox() {
+/*
+* Creates the selection area.
+*/
+function createSelectionArea() {
 	subjects = data.subjects
 	categories = data.categories
 
-	console.log(categories)
-	var column = 1
+	var columnNumber = 1
 	categories.forEach( function(category){
 
 		var timetablewrapperCategoryArea = "";
@@ -256,50 +250,71 @@ function setSubjectsCheckbox() {
 		} else {
 			category.sub.forEach(function(subcategory){
 			// Go through all sub categories
-        var appendix = ""
-				console.log(category)
-        subjects.forEach(function(subject) {
-          if (category.main == subject.category && subcategory == subject.subcategory)
-            appendix += createCheckboxEntry(subject)
-        });
-        if(appendix != "") {
-          appendix = '<h5>' + subcategory + '</h5>' + appendix 
-          timetablewrapperCategoryArea += appendix
-        }
-      });
-    }
-    console.log("cat area: " + timetablewrapperCategoryArea)
-    if (timetablewrapperCategoryArea != "") {
-      
-      timetablewrapperCategoryArea = '<h3>' + category.main + '</h3>' + timetablewrapperCategoryArea
-      $('#selectionarea' + column).append(timetablewrapperCategoryArea)
-			console.log(document.getElementById("timetablewrapper"))
-    }
+				var appendix = ""
+				// console.log(category)
+				subjects.forEach(function(subject) {
+					if (category.main == subject.category && subcategory.name == subject.subcategory)
+						appendix += createCheckboxEntry(subject)
+				});
+				if(appendix != "") {
+					appendix = '<h5>' + createSubcategory(subcategory) + '</h5>' + appendix 
+					timetablewrapperCategoryArea += appendix
+				}
+			});
+		}
+		// console.log("cat area: " + timetablewrapperCategoryArea)
+		if (timetablewrapperCategoryArea != "") {
+			timetablewrapperCategoryArea = '<h3>' + category.main + '</h3>' + timetablewrapperCategoryArea
+			$('#selectionarea' + columnNumber).append(timetablewrapperCategoryArea)
+			// console.log(document.getElementById("timetablewrapper"))
+		}
 		if (category.break)
-			column++
-  })
-  
-  
-  $(".subjectsCheckbox").change(function() {
-    setTaken($(this).attr('id'), this.checked)
-    refresh(false);
-  });
+			columnNumber++
+	})
+	
+	$(".subjectsCheckbox").change(function() {
+		console.log("Hallo 4")
+		console.log($(this).attr('id'))
+		console.log(this.checked)
+		setTaken($(this).attr('id'), this.checked)
+		refresh(false);
+	});
 }
 
+/*
+* Creates the string for a subcategory header
+*/
+function createSubcategory(subcategory) {
+	var string = subcategory.name +  " ("
+	if (subcategory.sp_range.length == 1) {
+		string += subcategory.sp_range[0] + " SP" + ")"
+	} else {
+		string += subcategory.sp_range[0] + " SP - " + subcategory.sp_range[1] + " SP)"
+	}
+	return string
+}
+
+/*
+* Creates the string for a checkbox entry
+*/
 function createCheckboxEntry(subject) {
+	var string = ""
 	var credits = "?"
 	if (subject.sp != -1)
-		credits = subject.sp;
-	var string = '<input class="subjectsCheckbox" id="' + subject.name 
-		+ '"type="checkbox" value=' + subject.taken + ' ' 
-		+ checked(subject.taken) + '> ' 
+		credits = subject.sp
+	string += '<label class="myCheckbox">'
+		+'<input class="subjectsCheckbox" type="checkbox" name="test" id="' + subject.name 
+		+ '" value=' + subject.taken + ' ' 
+		+ checked(subject.taken) + '/> <span id="' + subject.university + '_Span" ></span></label><label for="test"> ' 
 		+ subject.name 
 		+ " (" + credits + " SP)" 
-		+ '</input> </br>'
-
+		+ '</label> </br>'
 	return string;
 }
 
+/*
+* Returns a checked string if checked is true, else empty String
+*/
 function checked(bool) {
 	if (bool)
 		return "checked"
@@ -307,11 +322,12 @@ function checked(bool) {
 		return ""
 }
 
-function setTaken(id, bool) {
-  for (subject in subjects) {
-    if (subjects[subject].name == id) {
-      subjects[subject].taken = bool;
-      console.log("Changed: " + subjects[subject].name)
-    }
-  }
+
+function setTaken(subjectName, bool) {
+	for (subject in subjects) {
+		if (subjects[subject].name == subjectName) {
+			subjects[subject].taken = bool;
+			// console.log("Changed: " + subjects[subject].name)
+		}
+	}
 }
