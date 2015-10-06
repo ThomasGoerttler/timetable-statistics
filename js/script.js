@@ -25,13 +25,26 @@ function refresh() {
 	subjects = data.subjects
 	
 	// Just for testing
-	if (start) { 		
-		/*for (var i = 0; i < subjects.length; i++) {
-			if (Math.random() < 0.75) {
-				subjects[i].taken = false
+	if (start) {
+		if(typeof(Storage) !== "undefined") {
+			console.log("GET ITEM" + localStorage.getItem("savedSubjectsWS2015"))
+			
+			if (localStorage.getItem("savedSubjectsWS2015") != null ) {
+
+				console.log("Get cookie.")
+				var selectionString = localStorage.getItem("savedSubjectsWS2015")
+				console.log(selectionString)
+				savedSubjects = JSON.parse(selectionString)
+			} else {
+				console.log("Saves in cookie.")
+				savedSubjects = defaultSavedSubjects
+				localStorage.setItem("savedSubjectsWS2015", JSON.stringify(savedSubjects))
 			}
-		} */
-		savedSubjects = defaultSavedSubjects
+		} else {
+			savedSubjects = defaultSavedSubjects
+		}
+		
+		
 		for (var i = 0; i < subjects.length; i++) {
 			if (savedSubjects.subjects.indexOf(subjects[i].name) == -1) {
 				subjects[i].taken = false
@@ -113,14 +126,23 @@ function showTimetable(timetable) {
 	$("#emptySelectionButton").click(function() {
 		console.log("Empty Click")
 		setAllSubjectsOn(false)
-		refresh(false);
+		refresh(false)
+		savedSubjects.subjects = []
+		localStorage.setItem("savedSubjectsWS2015", JSON.stringify(savedSubjects))
 	})
 	
 	
 	$("#allSelectionButton").click(function() {
 		console.log("All Click")
 		setAllSubjectsOn(true)
-		refresh(false);
+		refresh(false)
+		
+		savedSubjects.subjects = []
+		for (subject in subjects) {
+			savedSubjects.subjects.push(subjects[subject].name)
+		} 
+		
+		localStorage.setItem("savedSubjectsWS2015", JSON.stringify(savedSubjects))
 	})
 	
 	timetable.weekdays.forEach(function(weekday) {
@@ -304,6 +326,7 @@ function createSelectionArea() {
 		console.log(this.checked)
 		setTaken($(this).attr('id'), this.checked)
 		refresh();
+		updateCookies($(this).attr('id'))
 	});
 }
 
@@ -321,7 +344,11 @@ function updateCookies (subject) {
 			savedSubjects.subjects.splice(index, 1)
 		}
 	}
-	
+	if(typeof(Storage) !== "undefined") {
+
+		localStorage.setItem("savedSubjectsWS2015", JSON.stringify(savedSubjects))
+
+	} 
 	// Update the 
 	
 }
@@ -381,3 +408,4 @@ function setTaken(subjectName, bool) {
 		}
 	}
 }
+
