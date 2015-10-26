@@ -145,6 +145,24 @@ function showTimetable(timetable) {
 		localStorage.setItem("savedSubjectsWS2015", JSON.stringify(savedSubjects))
 	})
 	
+	$("#undoButton").click(function() {
+		var undoList = JSON.parse(localStorage.getItem("undoListWS2015"))
+		var subjectName = undoList[undoList.length]
+		
+		
+		changeCheckedStatus(subjectName)
+		refresh()
+		updateInLocalStorage(subjectName)
+		
+		
+		localStorage.setItem("undoListWS2015", JSON.stringify(undoList))
+		
+	})	
+	
+	$("#redoButton").click(function() {
+		
+	})
+	
 	timetable.weekdays.forEach(function(weekday) {
 		
 		var weekdayDiv = createDiv("weekday")
@@ -326,7 +344,7 @@ function createSelectionArea() {
 		console.log(this.checked)
 		setTaken($(this).attr('id'), this.checked)
 		refresh();
-		updateCookies($(this).attr('id'))
+		updateInLocalStorage($(this).attr('id'))
 	});
 }
 
@@ -334,7 +352,7 @@ function createSelectionArea() {
 /*
 * Update cookies
 */
-function updateCookies (subject) {
+function updateInLocalStorage (subject) {
 	
 	if (subject != null) {
 		var index = savedSubjects.subjects.indexOf(subject)
@@ -403,8 +421,16 @@ function setAllSubjectsOn(bool) {
 function setTaken(subjectName, bool) {
 	for (subject in subjects) {
 		if (subjects[subject].name == subjectName) {
-			subjects[subject].taken = bool;
+			subjects[subject].taken = bool
 			// console.log("Changed: " + subjects[subject].name)
+		}
+	}
+}
+
+function changeCheckedStatus(subjectName) {
+	for (subject in subjects) {
+		if (subjects[subject].name == subjectName) {
+			subjects[subject].taken = !subjects[subject].taken
 		}
 	}
 }
