@@ -5,6 +5,7 @@ var width = 1100 // 1200 - width of hour
 var space = 1
 var widthOfHourText = 50
 var subjects
+var CURRENT_SEMESTER = "WS2015"
 
 var start = true
 
@@ -22,28 +23,48 @@ function refresh() {
 	$('#selectionarea2').empty()
 	$('#selectionarea3').empty()
 	$('#timetablewrapper').empty()
-	subjects = data.subjects
+	currentSemester = ""
 	
-	// Just for testing
+	
+	// This block finds out the semester being latestly worked on; defaultly the current semester
+	if(typeof(Storage) !== "undefined") {
+		if (localStorage.getItem("currentSemesterStore") != null ) {
+			currentSemester = localStorage.getItem("currentSemesterStore")
+		} else {
+			currentSemester = CURRENT_SEMESTER
+			localStorage.setItem("currentSemesterStore", currentSemester)
+		}
+	} else {
+		currentSemester = CURRENT_SEMESTER
+	}
+	
+	subjects = getSubjectsForSemester(currentSemester)
+	
+	
+	// At the start
 	if (start) {
 		if(typeof(Storage) !== "undefined") {
-			console.log("GET ITEM" + localStorage.getItem("savedSubjectsWS2015"))
+			console.log("GET ITEM" + localStorage.getItem("savedSubjects"+currentSemester))
 			
-			if (localStorage.getItem("savedSubjectsWS2015") != null ) {
+			if (localStorage.getItem("savedSubjects"+currentSemester) != null ) {
 
 				console.log("Get cookie.")
-				var selectionString = localStorage.getItem("savedSubjectsWS2015")
+				var selectionString = localStorage.getItem("savedSubjects"+currentSemester)
 				console.log(selectionString)
 				savedSubjects = JSON.parse(selectionString)
 			} else {
 				console.log("Saves in cookie.")
-				savedSubjects = defaultSavedSubjects
-				localStorage.setItem("savedSubjectsWS2015", JSON.stringify(savedSubjects))
+				savedSubjects = new Object()
+				savedSubjects.subjects = getDefaultSubjectsForSemester(currentSemester)
+				localStorage.setItem("savedSubjects"+currentSemester, JSON.stringify(savedSubjects))
 			}
 		} else {
-			savedSubjects = defaultSavedSubjects
+			savedSubjects = new Object()
+			savedSubjects.subjects = getDefaultSubjectsForSemester(currentSemester)
 		}
 		
+		console.log("savedSubjects")
+		console.log(savedSubjects)
 		
 		for (var i = 0; i < subjects.length; i++) {
 			if (savedSubjects.subjects.indexOf(subjects[i].name) == -1) {
@@ -123,12 +144,25 @@ function showTimetable(timetable) {
   $("#creditsSum").text(timetable.creditSum + " SP")
 	
 	
+	$("#ws2015Button").click(function() {
+
+		localStorage.setItem("currentSemesterStore", "WS2015")
+		start = true
+		refresh()
+	})
+	
+	$("#ss2016Button").click(function() {
+		localStorage.setItem("currentSemesterStore", "SS2016")
+		start = true
+		refresh()
+	})
+	
 	$("#emptySelectionButton").click(function() {
 		console.log("Empty Click")
 		setAllSubjectsOn(false)
 		refresh(false)
 		savedSubjects.subjects = []
-		localStorage.setItem("savedSubjectsWS2015", JSON.stringify(savedSubjects))
+		localStorage.setItem("savedSubjects"+currentSemester, JSON.stringify(savedSubjects))
 	})
 	
 	
@@ -142,7 +176,7 @@ function showTimetable(timetable) {
 			savedSubjects.subjects.push(subjects[subject].name)
 		} 
 		
-		localStorage.setItem("savedSubjectsWS2015", JSON.stringify(savedSubjects))
+		localStorage.setItem("savedSubjects"+currentSemester, JSON.stringify(savedSubjects))
 	})
 	
 	$("#undoButton").click(function() {
@@ -299,7 +333,7 @@ function showSelectionArea() {
 * Creates the selection area.
 */
 function createSelectionArea() {
-	subjects = data.subjects
+	subjects = getSubjectsForSemester(currentSemester)
 	categories = data.categories
 
 	var columnNumber = 1
@@ -364,7 +398,7 @@ function updateInLocalStorage (subject) {
 	}
 	if(typeof(Storage) !== "undefined") {
 
-		localStorage.setItem("savedSubjectsWS2015", JSON.stringify(savedSubjects))
+		localStorage.setItem("savedSubjects"+currentSemester, JSON.stringify(savedSubjects))
 
 	} 
 	// Update the 
@@ -435,3 +469,17 @@ function changeCheckedStatus(subjectName) {
 	}
 }
 
+function getSubjectsForSemester(semester) {
+	if (semester === "WS2015") {
+		return data.subjectsWS2015
+	} else if (semester === "SS2016") {
+		return data.subjectsSS2016
+	}
+}
+function getDefaultSubjectsForSemester(semester) {
+	if (semester === "WS2015") {
+		return defaultSavedSubjects.subjectsWS2015
+	} else if (semester === "SS2016") {
+		return defaultSavedSubjects.subjectsSS2016
+	}
+}
