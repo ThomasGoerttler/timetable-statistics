@@ -6,6 +6,7 @@ var space = 1
 var widthOfHourText = 50
 var subjects
 var CURRENT_SEMESTER = "WS2015"
+var currentSemester = ""
 
 var start = true
 
@@ -23,7 +24,6 @@ function refresh() {
 	$('#selectionarea2').empty()
 	$('#selectionarea3').empty()
 	$('#timetablewrapper').empty()
-	currentSemester = ""
 	
 	
 	// This block finds out the semester being latestly worked on; defaultly the current semester
@@ -351,7 +351,6 @@ function createSelectionArea() {
 			category.sub.forEach(function(subcategory){
 			// Go through all sub categories
 				var appendix = ""
-				// console.log(category)
 				subjects.forEach(function(subject) {
 					if (category.main == subject.category && subcategory.name == subject.subcategory)
 						appendix += createCheckboxEntry(subject)
@@ -362,14 +361,12 @@ function createSelectionArea() {
 				}
 			});
 		}
-		// console.log("cat area: " + timetablewrapperCategoryArea)
 		if (timetablewrapperCategoryArea != "") {
 			timetablewrapperCategoryArea = '<h3>' + category.main + '</h3>' + timetablewrapperCategoryArea
 			$('#selectionarea' + columnNumber).append(timetablewrapperCategoryArea)
-			// console.log(document.getElementById("timetablewrapper"))
 		}
-		if (category.break)
-			columnNumber++
+		if ($.inArray(category.main, getCategoryBreakForSemester(currentSemester)) > -1)
+		 	columnNumber++
 	})
 	
 	$(".subjectsCheckbox").change(function() {
@@ -476,6 +473,15 @@ function getSubjectsForSemester(semester) {
 		return data.subjectsSS2016
 	}
 }
+
+function getCategoryBreakForSemester(semester) {
+	if (semester === "WS2015") {
+		return data.breaks.WS2015
+	} else if (semester === "SS2016") {
+		return data.breaks.SS2016
+	}
+}
+
 function getDefaultSubjectsForSemester(semester) {
 	if (semester === "WS2015") {
 		return defaultSavedSubjects.subjectsWS2015
