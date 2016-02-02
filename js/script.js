@@ -148,12 +148,16 @@ function showTimetable(timetable) {
 
 		localStorage.setItem("currentSemesterStore", "WS2015")
 		start = true
+		dehighlightButton($("#ss2016Button"))
+		highlightButton($("#ws2015Button"))
 		refresh()
 	})
 	
 	$("#ss2016Button").click(function() {
 		localStorage.setItem("currentSemesterStore", "SS2016")
 		start = true
+		highlightButton($("#ss2016Button"))
+		dehighlightButton($("#ws2015Button"))
 		refresh()
 	})
 	
@@ -488,4 +492,16 @@ function getDefaultSubjectsForSemester(semester) {
 	} else if (semester === "SS2016") {
 		return defaultSavedSubjects.subjectsSS2016
 	}
+}
+
+function highlightButton(button) {
+	button.css("fontSize", 20);
+	button.css("padding-top", 9);
+	button.css("height", 35);
+}
+
+function dehighlightButton(button) {
+	button.css("fontSize", 13);
+	button.css("padding-top", 13);
+	button.css("height", 31);
 }

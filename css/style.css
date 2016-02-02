@@ -91,9 +91,10 @@ h5 {
 
 
 .semesterButton {
-	height: 44px;
+	
+	height: 31px;
 	width: 220px;
-	padding-top: 0px;
+	padding-top: 13px;
 	text-align: center;
 	background-color: #3f3f3f;
 	color: white;
