@@ -5,7 +5,6 @@ var width = 1100 // 1200 - width of hour
 var space = 1
 var widthOfHourText = 50
 var subjects
-var CURRENT_SEMESTER = "WS2015"
 var currentSemester = ""
 
 var start = true
