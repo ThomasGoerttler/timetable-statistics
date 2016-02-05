@@ -339,6 +339,14 @@ h5 {
 	background-color: #f3ca57;
 }
 
+#HU_Informatik{
+	background-color: #CB282C; /* eigentlich charite color */
+}
+
+#HU_Informatik:hover{
+	background-color: #da686b;
+}
+
 #Charite{
 	background-color: #CB282C;	
 }
@@ -424,6 +432,14 @@ h5 {
 
 .myCheckbox input:checked + span#HU_Mathe_Span{
     background: #EFBB26
+}
+
+.myCheckbox span#HU_Informatik_Span{
+    border-color: #CB282C;
+}
+
+.myCheckbox input:checked + span#HU_Informatik_Span{
+    background: #CB282C
 }
 
 .myCheckbox span#Charite_Span{
