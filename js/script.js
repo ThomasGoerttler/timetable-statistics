@@ -43,26 +43,26 @@ function refresh() {
 	// At the start
 	if (start) {
 		if(typeof(Storage) !== "undefined") {
-			console.log("GET ITEM" + localStorage.getItem("savedSubjects"+currentSemester))
+			console.log("GET ITEM" + localStorage.getItem("savedSubjectsUpdate01"+currentSemester))
 			
-			if (localStorage.getItem("savedSubjects"+currentSemester) != null ) {
+			if (localStorage.getItem("savedSubjectsUpdate01"+currentSemester) != null ) {
 
 				console.log("Get cookie.")
-				var selectionString = localStorage.getItem("savedSubjects"+currentSemester)
+				var selectionString = localStorage.getItem("savedSubjectsUpdate01"+currentSemester)
 				console.log(selectionString)
 				savedSubjects = JSON.parse(selectionString)
 			} else {
 				console.log("Saves in cookie.")
 				savedSubjects = new Object()
 				savedSubjects.subjects = getDefaultSubjectsForSemester(currentSemester)
-				localStorage.setItem("savedSubjects"+currentSemester, JSON.stringify(savedSubjects))
+				localStorage.setItem("savedSubjectsUpdate01"+currentSemester, JSON.stringify(savedSubjects))
 			}
 		} else {
 			savedSubjects = new Object()
 			savedSubjects.subjects = getDefaultSubjectsForSemester(currentSemester)
 		}
-		
-		console.log("savedSubjects")
+
+		console.log("savedSubjectsUpdate01")
 		console.log(savedSubjects)
 		
 		for (var i = 0; i < subjects.length; i++) {
@@ -148,6 +148,7 @@ function showTimetable(timetable) {
 		localStorage.setItem("currentSemesterStore", "WS2015")
 		start = true
 		dehighlightButton($("#ss2016Button"))
+		dehighlightButton($("#ws2016Button"))
 		highlightButton($("#ws2015Button"))
 		refresh()
 	})
@@ -157,6 +158,16 @@ function showTimetable(timetable) {
 		start = true
 		highlightButton($("#ss2016Button"))
 		dehighlightButton($("#ws2015Button"))
+		dehighlightButton($("#ws2016Button"))
+		refresh()
+	})
+	
+	$("#ws2016Button").click(function() {
+		localStorage.setItem("currentSemesterStore", "WS2016")
+		start = true
+		highlightButton($("#ws2016Button"))
+		dehighlightButton($("#ws2015Button"))
+		dehighlightButton($("#ss2015Button"))
 		refresh()
 	})
 	
@@ -165,7 +176,7 @@ function showTimetable(timetable) {
 		setAllSubjectsOn(false)
 		refresh(false)
 		savedSubjects.subjects = []
-		localStorage.setItem("savedSubjects"+currentSemester, JSON.stringify(savedSubjects))
+		localStorage.setItem("savedSubjectsUpdate01"+currentSemester, JSON.stringify(savedSubjects))
 	})
 	
 	
@@ -179,7 +190,7 @@ function showTimetable(timetable) {
 			savedSubjects.subjects.push(subjects[subject].name)
 		} 
 		
-		localStorage.setItem("savedSubjects"+currentSemester, JSON.stringify(savedSubjects))
+		localStorage.setItem("savedSubjectsUpdate01"+currentSemester, JSON.stringify(savedSubjects))
 	})
 	
 	$("#undoButton").click(function() {
@@ -398,7 +409,7 @@ function updateInLocalStorage (subject) {
 	}
 	if(typeof(Storage) !== "undefined") {
 
-		localStorage.setItem("savedSubjects"+currentSemester, JSON.stringify(savedSubjects))
+		localStorage.setItem("savedSubjectsUpdate01"+currentSemester, JSON.stringify(savedSubjects))
 
 	} 
 	// Update the 
@@ -474,6 +485,8 @@ function getSubjectsForSemester(semester) {
 		return data.subjectsWS2015
 	} else if (semester === "SS2016") {
 		return data.subjectsSS2016
+	}	else if (semester === "WS2016") {
+		return data.subjectsWS2016
 	}
 }
 
@@ -482,6 +495,8 @@ function getCategoryBreakForSemester(semester) {
 		return data.breaks.WS2015
 	} else if (semester === "SS2016") {
 		return data.breaks.SS2016
+	}else if (semester === "WS2016") {
+		return data.breaks.WS2016
 	}
 }
 
@@ -490,6 +505,8 @@ function getDefaultSubjectsForSemester(semester) {
 		return defaultSavedSubjects.subjectsWS2015
 	} else if (semester === "SS2016") {
 		return defaultSavedSubjects.subjectsSS2016
+	}else if (semester === "WS2016") {
+		return defaultSavedSubjects.subjectsWS2016
 	}
 }
 
