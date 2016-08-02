@@ -6,6 +6,7 @@ var space = 1
 var widthOfHourText = 50
 var subjects
 var currentSemester = ""
+var SAVED_SUBJECTS = "savedSubjectsUpdate02"
 
 var start = true
 
@@ -44,20 +45,31 @@ function refresh() {
 	if (start) {
 		if(typeof(Storage) !== "undefined") {
 			
-			if (localStorage.getItem("savedSubjectsUpdate01"+currentSemester) != null ) {
+			if (localStorage.getItem(SAVED_SUBJECTS+currentSemester) != null ) {
 
-				var selectionString = localStorage.getItem("savedSubjectsUpdate01"+currentSemester)
+				var selectionString = localStorage.getItem(SAVED_SUBJECTS+currentSemester)
 				savedSubjects = JSON.parse(selectionString)
 			} else {
 				savedSubjects = new Object()
 				savedSubjects.subjects = getDefaultSubjectsForSemester(currentSemester)
-				localStorage.setItem("savedSubjectsUpdate01"+currentSemester, JSON.stringify(savedSubjects))
+				savedSubjects.hiddenLectures = new Array()
+				localStorage.setItem(SAVED_SUBJECTS+currentSemester, JSON.stringify(savedSubjects))
 			}
 		} else {
 			savedSubjects = new Object()
 			savedSubjects.subjects = getDefaultSubjectsForSemester(currentSemester)
+			savedSubjects.hiddenLectures = new Array()
 		}
-
+		
+		// Genrating of hidden Lectures
+		hiddenLectures = new Array()
+		lecture_ids = new Array()
+		savedSubjects.hiddenLectures.forEach( function(lecture) {
+			subject_name = lecture.split("_")[0]
+			lecture_id = lecture.slice(-1)
+			hiddenLectures.push(subject_name)
+			lecture_ids.push(lecture_id)
+		})
 		
 		for (var i = 0; i < subjects.length; i++) {
 			if (savedSubjects.subjects.indexOf(subjects[i].name) == -1) {
@@ -66,13 +78,21 @@ function refresh() {
 				subjects[i].taken = true
 			}
 		}
+		for (var i = 0; i < subjects.length; i++) {
+			if (hiddenLectures.indexOf(subjects[i].name) != -1) {
+				for (var j = 0; j < hiddenLectures.length; j++) {
+					if(subjects[i].name == hiddenLectures[j]) {
+						subjects[i].lectures[lecture_ids[j]].hide = true
+					}
+				}
+			} 
+		}
 		start = false
 	}
 	
 	var timetableModel = createNewTimetable(subjects)
 	showSelectionArea()
 	createHorizontalLinesAndHourDescription();
-	console.log(timetableModel)
 	showTimetable(timetableModel)
 	highlightButton($("#" + currentSemester.toLowerCase() + "Button"))
 }
@@ -167,7 +187,7 @@ function showTimetable(timetable) {
 		setAllSubjectsOn(false)
 		refresh(false)
 		savedSubjects.subjects = []
-		localStorage.setItem("savedSubjectsUpdate01"+currentSemester, JSON.stringify(savedSubjects))
+		localStorage.setItem(SAVED_SUBJECTS+currentSemester, JSON.stringify(savedSubjects))
 	})
 	
 	timetable.weekdays.forEach(function(weekday) {
@@ -350,7 +370,7 @@ function createSelectionArea() {
 			lecture_id = $(this).attr('id').slice(-1)
 			setTutorialAppearance(subject_name, lecture_id, !this.checked)
 			refresh();
-			updateInLocalStorage(subject_name, "tutorial", lecture_id)
+			updateInLocalStorage($(this).attr('id'), "tutorial")
 			
 		} else {
 			setTaken($(this).attr('id'), this.checked)
@@ -368,7 +388,7 @@ function createSelectionArea() {
 * Update cookies
 */
 function updateInLocalStorage (subject, type) {
-	
+
 	if (type == "lecture") {
 		if (subject != null) {
 			var index = savedSubjects.subjects.indexOf(subject)
@@ -379,15 +399,20 @@ function updateInLocalStorage (subject, type) {
 			}
 		} 
 	} else if (type == "tutorial") {
-		console.log("tutorial")
-		// TODO
+			
+		if (subject_name != null) {
+			var index = savedSubjects.hiddenLectures.indexOf(subject)
+			if (index == -1) {
+				savedSubjects.hiddenLectures.push(subject)
+			} else {
+				savedSubjects.hiddenLectures.splice(index, 1)
+			}
+		} 
 	}
-	
-	console.log((savedSubjects))
 	
 	if(typeof(Storage) !== "undefined") {
 
-		localStorage.setItem("savedSubjectsUpdate01"+currentSemester, JSON.stringify(savedSubjects))
+		localStorage.setItem(SAVED_SUBJECTS+currentSemester, JSON.stringify(savedSubjects))
 
 	} 
 	// Update the 
@@ -465,10 +490,8 @@ function setTutorialAppearance(subjectName, lecture_id, bool) {
 	for (subject in subjects) {
 		if (subjects[subject].name == subjectName) {
 			subjects[subject].lectures[lecture_id].hide = bool
-			console.log(subjects[subject].lectures[lecture_id].hide)
 		}
 	}
-	console.log(subjects)
 }
 
 function changeCheckedStatus(subjectName) {
