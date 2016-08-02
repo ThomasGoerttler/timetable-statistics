@@ -14,7 +14,7 @@ var savedSubjects
 jQuery(document).ready(
 	function() {
 		refresh()
-		$( document ).tooltip();
+		//$( document ).tooltip();
 	});
 	
 function refresh() {
@@ -43,16 +43,12 @@ function refresh() {
 	// At the start
 	if (start) {
 		if(typeof(Storage) !== "undefined") {
-			console.log("GET ITEM" + localStorage.getItem("savedSubjectsUpdate01"+currentSemester))
 			
 			if (localStorage.getItem("savedSubjectsUpdate01"+currentSemester) != null ) {
 
-				console.log("Get cookie.")
 				var selectionString = localStorage.getItem("savedSubjectsUpdate01"+currentSemester)
-				console.log(selectionString)
 				savedSubjects = JSON.parse(selectionString)
 			} else {
-				console.log("Saves in cookie.")
 				savedSubjects = new Object()
 				savedSubjects.subjects = getDefaultSubjectsForSemester(currentSemester)
 				localStorage.setItem("savedSubjectsUpdate01"+currentSemester, JSON.stringify(savedSubjects))
@@ -62,17 +58,12 @@ function refresh() {
 			savedSubjects.subjects = getDefaultSubjectsForSemester(currentSemester)
 		}
 
-		console.log("savedSubjectsUpdate01")
-		console.log(savedSubjects)
 		
 		for (var i = 0; i < subjects.length; i++) {
 			if (savedSubjects.subjects.indexOf(subjects[i].name) == -1) {
 				subjects[i].taken = false
-				console.log("False " +subjects[i].name)
-				console.log(savedSubjects.subjects)
 			} else {
 				subjects[i].taken = true
-				console.log("True " +subjects[i].name)
 			}
 		}
 		start = false
@@ -81,8 +72,9 @@ function refresh() {
 	var timetableModel = createNewTimetable(subjects)
 	showSelectionArea()
 	createHorizontalLinesAndHourDescription();
+	console.log(timetableModel)
 	showTimetable(timetableModel)
-	
+	highlightButton($("#" + currentSemester.toLowerCase() + "Button"))
 }
 
 function createHorizontalLinesAndHourDescription() {
@@ -167,48 +159,15 @@ function showTimetable(timetable) {
 		start = true
 		highlightButton($("#ws2016Button"))
 		dehighlightButton($("#ws2015Button"))
-		dehighlightButton($("#ss2015Button"))
+		dehighlightButton($("#ss2016Button"))
 		refresh()
 	})
 	
 	$("#emptySelectionButton").click(function() {
-		console.log("Empty Click")
 		setAllSubjectsOn(false)
 		refresh(false)
 		savedSubjects.subjects = []
 		localStorage.setItem("savedSubjectsUpdate01"+currentSemester, JSON.stringify(savedSubjects))
-	})
-	
-	
-	$("#allSelectionButton").click(function() {
-		console.log("All Click")
-		setAllSubjectsOn(true)
-		refresh(false)
-		
-		savedSubjects.subjects = []
-		for (subject in subjects) {
-			savedSubjects.subjects.push(subjects[subject].name)
-		} 
-		
-		localStorage.setItem("savedSubjectsUpdate01"+currentSemester, JSON.stringify(savedSubjects))
-	})
-	
-	$("#undoButton").click(function() {
-		var undoList = JSON.parse(localStorage.getItem("undoListWS2015"))
-		var subjectName = undoList[undoList.length]
-		
-		
-		changeCheckedStatus(subjectName)
-		refresh()
-		updateInLocalStorage(subjectName)
-		
-		
-		localStorage.setItem("undoListWS2015", JSON.stringify(undoList))
-		
-	})	
-	
-	$("#redoButton").click(function() {
-		
 	})
 	
 	timetable.weekdays.forEach(function(weekday) {
@@ -223,7 +182,7 @@ function showTimetable(timetable) {
 			
 			// Each lecture in the day column
 			dayColumn.forEach(function(hour) {
-				if(hour != null && hour !== "notNull") {
+				if(hour != null && hour !== "notNull" && !hour.hide) {
 					var lecture = createDiv("lecture")
 					var lectureWidth = width/timetable.columns - space - 4
 					lecture.title = "Name: " + hour.subject.name + "\n"
@@ -306,7 +265,6 @@ function showTimetable(timetable) {
 						lecture.appendChild(iconContainer)
 					}
 					
-					// console.log(hour)
 					containerDiv.appendChild(lecture);
 				}
 			})
@@ -384,12 +342,24 @@ function createSelectionArea() {
 	})
 	
 	$(".subjectsCheckbox").change(function() {
-		console.log("Hallo 4")
-		console.log($(this).attr('id'))
-		console.log(this.checked)
-		setTaken($(this).attr('id'), this.checked)
-		refresh();
-		updateInLocalStorage($(this).attr('id'))
+		
+		// Check if it is a tutorial button
+		
+		if($(this).attr('id').includes('tutorial')) {
+			subject_name = $(this).attr('id').split("_")[0]
+			lecture_id = $(this).attr('id').slice(-1)
+			setTutorialAppearance(subject_name, lecture_id, !this.checked)
+			refresh();
+			updateInLocalStorage(subject_name, "tutorial", lecture_id)
+			
+		} else {
+			setTaken($(this).attr('id'), this.checked)
+			refresh();
+			updateInLocalStorage($(this).attr('id'), "lecture")
+		}
+		
+		
+
 	});
 }
 
@@ -397,16 +367,24 @@ function createSelectionArea() {
 /*
 * Update cookies
 */
-function updateInLocalStorage (subject) {
+function updateInLocalStorage (subject, type) {
 	
-	if (subject != null) {
-		var index = savedSubjects.subjects.indexOf(subject)
-		if (index == -1) {
-			savedSubjects.subjects.push(subject)
-		} else {
-			savedSubjects.subjects.splice(index, 1)
-		}
+	if (type == "lecture") {
+		if (subject != null) {
+			var index = savedSubjects.subjects.indexOf(subject)
+			if (index == -1) {
+				savedSubjects.subjects.push(subject)
+			} else {
+				savedSubjects.subjects.splice(index, 1)
+			}
+		} 
+	} else if (type == "tutorial") {
+		console.log("tutorial")
+		// TODO
 	}
+	
+	console.log((savedSubjects))
+	
 	if(typeof(Storage) !== "undefined") {
 
 		localStorage.setItem("savedSubjectsUpdate01"+currentSemester, JSON.stringify(savedSubjects))
@@ -437,12 +415,24 @@ function createCheckboxEntry(subject) {
 	var credits = "?"
 	if (subject.sp != -1)
 		credits = subject.sp
+		
+
+	tutorial_selection = ''
+	for (lecture in subject.lectures) {
+		if(subject.lectures[lecture].hasAlternative) {
+			checked_item = checked(subject.taken && !subject.lectures[lecture].hide)
+			tutorial_selection += '<label class="myCheckbox" style="display: inline-flex;"> <input class="subjectsCheckbox" type="checkbox" name="test" id="' + subject.name + "_tutorial_" + lecture 
+		+ '" value=' + subject.taken + ' ' 
+		+ checked_item + '/> <span id="' + subject.university + '_Span" ></span></label>'
+		}
+	}
+	
 	string += '<label class="myCheckbox">'
 		+'<input class="subjectsCheckbox" type="checkbox" name="test" id="' + subject.name 
 		+ '" value=' + subject.taken + ' ' 
 		+ checked(subject.taken) + '/> <span id="' + subject.university + '_Span" ></span></label><label for="test"> ' 
 		+ subject.name 
-		+ " (" + credits + " SP)" 
+		+ " (" + credits + " SP)" + tutorial_selection
 		+ '</label> </br>'
 	return string;
 }
@@ -467,9 +457,18 @@ function setTaken(subjectName, bool) {
 	for (subject in subjects) {
 		if (subjects[subject].name == subjectName) {
 			subjects[subject].taken = bool
-			// console.log("Changed: " + subjects[subject].name)
 		}
 	}
+}
+
+function setTutorialAppearance(subjectName, lecture_id, bool) {
+	for (subject in subjects) {
+		if (subjects[subject].name == subjectName) {
+			subjects[subject].lectures[lecture_id].hide = bool
+			console.log(subjects[subject].lectures[lecture_id].hide)
+		}
+	}
+	console.log(subjects)
 }
 
 function changeCheckedStatus(subjectName) {
@@ -511,13 +510,9 @@ function getDefaultSubjectsForSemester(semester) {
 }
 
 function highlightButton(button) {
-	button.css("fontSize", 20);
-	button.css("padding-top", 9);
-	button.css("height", 35);
+	button.addClass("semesterButtonBig")
 }
 
 function dehighlightButton(button) {
-	button.css("fontSize", 13);
-	button.css("padding-top", 13);
-	button.css("height", 31);
+	button.removeClass("semesterButtonBig")
 }

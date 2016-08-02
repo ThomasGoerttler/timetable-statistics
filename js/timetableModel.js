@@ -27,8 +27,10 @@ function createNewTimetable(subjects) {
 		weekday.dayColumns.push(createNewDayColumn());
 	})
 	
+	console.log("Model")
+	console.log(subjects)
+	console.log("Model ENd")
 	
-	// do the fucking iteration to the subjects
 
 	var creditSum = 0
 	subjects.forEach(function(subject) {
@@ -37,6 +39,10 @@ function createNewTimetable(subjects) {
 				creditSum += Number(subject.sp)
 			if (subject.sp !== -1)
 			subject.lectures.forEach(function(lecture) {
+				
+				if (lecture.hide)
+					return
+				
 				var weekdayOfLecture = timetable.weekdays[getDay(lecture.day) - 1]
 				var dayColumns = weekdayOfLecture.dayColumns
 				var alreadyInserted = false
@@ -63,8 +69,7 @@ function createNewTimetable(subjects) {
 	// Calculate the count of columns
 	timetable.weekdays.forEach(function(value) {
 		timetable.columns += value.dayColumns.length
-	})
-	console.log(timetable)
+	}) 
 	// return the timeblel
 	return timetable
 }

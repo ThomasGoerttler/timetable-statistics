@@ -47,6 +47,7 @@ body {
 	margin: 30px auto 0px;
 	position: relative;
 	height: 30px;
+	padding-bottom: 10px;
 }
 
 
@@ -90,31 +91,64 @@ h5 {
 
 
 
-.semesterButton {
+.semesterButtonWrapper {
 	
-	height: 31px;
-	width: 220px;
-	padding-top: 13px;
+	height: 44px;
+	width: 100px;
 	text-align: center;
-	background-color: #3f3f3f;
-	color: white;
+	background-color: white;
+	color: #3f3f3f;
 	font-weight: bold;
 	float: left;
 	border-radius: 3px;
 }
 
 .semesterButton:hover {
-	background-color: #979797;
+	width: 28px;
+	height: 28px;
+	border-radius: 14px;
+	margin-left: 41px;
+	margin-top: 1px;
+	margin-bottom: 1px;
 }
 
-#ss2016Button, #ws2016Button {
-	margin-left: 15px;
+.semesterButtonWrapper:after {
+    position: absolute;
+    left: 0;
+    top: 38%;
+    height: 2px;
+    background: #3f3f3f;
+    content: "";
+    width: 28%;
+    display: block;
+		
+}
+.semesterButton {
+    margin-top: 5px;
+	  background-color: #3f3f3f;
+    margin-bottom: 5px;
+	    width: 20px;
+	    height: 20px;
+	    border-radius: 10px;
+	    margin-left: 45px;
+}
+
+.semesterButtonBig {
+	  background-color: #3f3f3f;
+		width: 28px;
+		height: 28px;
+		border-radius: 14px;
+		margin-left: 41px;
+		margin-top: 1px;
+		margin-bottom: 1px;
 }
 
 .selectionButton {
 	height: 44px;
-	width: 120px;
+	width: 44px;
 	padding-top: 0px;
+
+	margin-left: 670px; 
 	text-align: center;
 	background-color: #3f3f3f;
 	color: white;
@@ -149,18 +183,6 @@ h5 {
 	background-image: url("../img/unSelectAll.png");
 }
 
-
-#selectAllIcon {
-	background-image: url("../img/selectAll.png");
-}
-
-#undoIcon {
-	background-image: url("../img/undo.png");
-}
-
-#redoIcon {
-	background-image: url("../img/redo.png");
-}
 
 #creditsSum {
 	height: 32px;
