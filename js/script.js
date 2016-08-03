@@ -159,13 +159,13 @@ function showTimetable(timetable) {
 	
 	// Set action of empty selection Button
 	$("#emptySelectionButton").click(function() {
-		setAllSubjectsOn(false)
+		setAllSubjectsOnFalse()
 		refresh(false)
 		savedSubjects.subjects = []
 		localStorage.setItem(SAVED_SUBJECTS+currentSemester, JSON.stringify(savedSubjects))
 	})
 	
-	var columnNumber = 0 // Iterator over the day columns They are not the same as the weekday colums, as a weekday can have more than one column
+	var columnNumber = 0 // Iterator over the day columns. They are not the same as the weekday colums, as a weekday can have more than one column
 	
 	timetable.weekdays.forEach(function(weekday) {
 		
@@ -182,19 +182,7 @@ function showTimetable(timetable) {
 				if(hour != null && hour !== "notNull" && !hour.hide) {
 					var lecture = createDiv("lecture")
 					var lectureWidth = width/timetable.columns - space - 4
-					lecture.title = "Name: " + hour.subject.name + "\n"
-						+ "Uni: " + hour.subject.university + "\n"
-						+ "Address: " + hour.subject.address + "\n"
-						+ "Lecturer: " + hour.subject.lecturer + "\n"
-						+ "category: " + hour.subject.category  + "\n"
-					
-						+ "Room: " + hour.lecture.room  + "\n"
-						+ "SP: " + hour.subject.sp + "\n"
-						+ "Type: " + hour.lecture.type + "\n"
-						+ "annotation: " + hour.subject.annotation + "\n"
-						+ "language: " + hour.subject.language
-					if (hour.subject.hasAlternative)
-						lecture.title += "\nhas an alternative date:"
+					lecture.title = createHoverTitle(hour)
 					
 					lecture.style.height = heightOfOneHour * hour.lecture.duration + (hour.lecture.duration - 1) * space - 4 +"px" // - 4 for padding
 					lecture.style.width = lectureWidth + "px" // 4 for padding
@@ -237,11 +225,9 @@ function showTimetable(timetable) {
 						var type = createDiv("lectureType")
 						type.appendChild(document.createTextNode(hour.lecture.type))
 						iconContainer.appendChild(type)
-						// maybe text
+						// Spacer
 						var spacer = createDiv("spacer")
 						spacer.style.width = lectureWidth - 4 * 20.5 + "px"
-						if (hour.lecture.hasAlternative)
-							spacer.appendChild(document.createTextNode("! "))
 						iconContainer.appendChild(spacer)
 						//weekly
 						var weekly = createDiv("oneWeek")
@@ -276,6 +262,22 @@ function showTimetable(timetable) {
 		var newText = text.substr(0,count-3)
 		newText += "..."
 		return newText
+	}
+	
+	function createHoverTitle(hour) {
+		title = "Name: " + hour.subject.name + "\n"
+			+ "Uni: " + hour.subject.university + "\n"
+			+ "Address: " + hour.subject.address + "\n"
+			+ "Lecturer: " + hour.subject.lecturer + "\n"
+			+ "category: " + hour.subject.category  + "\n"
+			+ "Room: " + hour.lecture.room  + "\n"
+			+ "SP: " + hour.subject.sp + "\n"
+			+ "Type: " + hour.lecture.type + "\n"
+			+ "annotation: " + hour.subject.annotation + "\n"
+			+ "language: " + hour.subject.language
+		if (hour.subject.hasAlternative)
+			title += "\nhas an alternative date:"
+		return title
 	}
 }
 
@@ -320,53 +322,48 @@ function createSelectionArea() {
 	})
 	
 	$(".subjectsCheckbox").change(function() {
-		
-		// Check if it is a tutorial button
-		
-		if($(this).attr('id').includes('tutorial')) {
+		if(checkboxIsTutorialButton(this)) {
 			subject_name = $(this).attr('id').split("_")[0]
 			lecture_id = $(this).attr('id').slice(-1)
-			setTutorialAppearance(subject_name, lecture_id, !this.checked)
+			getSubjectObject(subject_name).lectures[lecture_id].hide =  !this.checked
 			refresh();
 			updateInLocalStorage($(this).attr('id'), "tutorial")
-			
 		} else {
-			setTaken($(this).attr('id'), this.checked)
+			getSubjectObject($(this).attr('id')).taken = this.checked
 			refresh();
 			updateInLocalStorage($(this).attr('id'), "lecture")
 		}
 	});
+	
+	function checkboxIsTutorialButton(object) {
+		return $(object).attr('id').includes('tutorial') 
+	}
+	
 }
 
 /*
 * Update cookies
 */
 function updateInLocalStorage (subject, type) {
-
-	if (type == "lecture") {
-		if (subject != null) {
-			var index = savedSubjects.subjects.indexOf(subject)
-			if (index == -1) {
-				savedSubjects.subjects.push(subject)
-			} else {
-				savedSubjects.subjects.splice(index, 1)
-			}
-		} 
-	} else if (type == "tutorial") {
-			
-		if (subject_name != null) {
-			var index = savedSubjects.hiddenLectures.indexOf(subject)
-			if (index == -1) {
-				savedSubjects.hiddenLectures.push(subject)
-			} else {
-				savedSubjects.hiddenLectures.splice(index, 1)
-			}
-		} 
-	}
 	
+	if (subject == null)
+		return
+	if (type == "lecture") {
+		addOrRemoveToList(savedSubjects.subjects, subject)
+	} else if (type == "tutorial") {
+		addOrRemoveToList(savedSubjects.hiddenLectures, subject)
+	}
 	if(typeof(Storage) !== "undefined") {
 		localStorage.setItem(SAVED_SUBJECTS+currentSemester, JSON.stringify(savedSubjects))
 	} 
+	function addOrRemoveToList(store, object) {
+		var index = store.indexOf(object)
+		if (index == -1) {
+			store.push(object)
+		} else {
+			store.splice(index, 1)
+		}
+	}
 }
 
 /*
@@ -392,11 +389,11 @@ function createCheckboxEntry(subject) {
 		credits = subject.sp
 		
 
-	tutorial_selection = ''
+	tutorial_selection_checkboxes = ""
 	for (lecture in subject.lectures) {
 		if(subject.lectures[lecture].hasAlternative) {
 			checked_item = checked(subject.taken && !subject.lectures[lecture].hide)
-			tutorial_selection += '<label class="myCheckbox" style="display: inline-flex;"> <input class="subjectsCheckbox" type="checkbox" name="test" id="' + subject.name + "_tutorial_" + lecture 
+			tutorial_selection_checkboxes += '<label class="myCheckbox" style="display: inline-flex;"> <input class="subjectsCheckbox" type="checkbox" name="test" id="' + subject.name + "_tutorial_" + lecture 
 		+ '" value=' + subject.taken + ' ' 
 		+ checked_item + '/> <span id="' + subject.university + '_Span" ></span></label>'
 		}
@@ -407,7 +404,7 @@ function createCheckboxEntry(subject) {
 		+ '" value=' + subject.taken + ' ' 
 		+ checked(subject.taken) + '/> <span id="' + subject.university + '_Span" ></span></label><label for="test"> ' 
 		+ subject.name 
-		+ " (" + credits + " SP)" + tutorial_selection
+		+ " (" + credits + " SP)" + tutorial_selection_checkboxes
 		+ '</label> </br>'
 	return string;
 }
@@ -422,32 +419,16 @@ function checked(bool) {
 		return ""
 }
 
-function setAllSubjectsOn(bool) {
+function setAllSubjectsOnFalse() {
 	for (subject in subjects) {
-		subjects[subject].taken = bool;
+		subjects[subject].taken = false;
 	}
 }
 
-function setTaken(subjectName, bool) {
+function getSubjectObject(name) {
 	for (subject in subjects) {
-		if (subjects[subject].name == subjectName) {
-			subjects[subject].taken = bool
-		}
-	}
-}
-
-function setTutorialAppearance(subjectName, lecture_id, bool) {
-	for (subject in subjects) {
-		if (subjects[subject].name == subjectName) {
-			subjects[subject].lectures[lecture_id].hide = bool
-		}
-	}
-}
-
-function changeCheckedStatus(subjectName) {
-	for (subject in subjects) {
-		if (subjects[subject].name == subjectName) {
-			subjects[subject].taken = !subjects[subject].taken
+		if (subjects[subject].name == name) {
+			return(subjects[subject])
 		}
 	}
 }
@@ -463,14 +444,13 @@ function getDefaultSubjectsForSemester(semester) {
 }
 
 function highlightButton(button) {
-	// dehilight the all buttons first
+	// dehiglight the all buttons first
 	$('.semesterButton').each(function(i, obj) {
-		dehighlightButton($("#" + obj.id))
+		dehiglightButton($("#" + obj.id))
 	});
-	
 	button.addClass("semesterButtonBig")
 	
-	function dehighlightButton(button) {
+	function dehiglightButton(button) {
 		button.removeClass("semesterButtonBig")
 	}
 }
@@ -482,4 +462,3 @@ function createDiv(cssClass) {
 	div.setAttribute("class", cssClass);
 	return div;
 }
-
