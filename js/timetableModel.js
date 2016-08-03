@@ -21,6 +21,7 @@ function createNewTimetable(subjects) {
 		"columns" : 0,
 		"creditSum" : 0
 	}
+	
 	// Each array gets a starting new Day Column which is empty
 	timetable.weekdays.forEach(function(weekday) {
 		weekday.dayColumns = new Array();
@@ -39,7 +40,7 @@ function createNewTimetable(subjects) {
 				creditSum += Number(subject.sp)
 			if (subject.sp !== -1)
 			subject.lectures.forEach(function(lecture) {
-				
+				// Only show the lecture, when the hidden flag is not set
 				if (lecture.hide)
 					return
 				
@@ -53,16 +54,13 @@ function createNewTimetable(subjects) {
 						alreadyInserted = insertIn(dayColumn, lecture, subject)
 					}
 				});
-				
 				// create new day column and insert it
 				if (!alreadyInserted) {
 					dayColumns.push(createNewDayColumn())
 					insertIn(dayColumns[dayColumns.length - 1], lecture, subject)
 				}
-				
 			});
 		}
-
 		timetable.creditSum = creditSum
 	});
 	
@@ -70,13 +68,12 @@ function createNewTimetable(subjects) {
 	timetable.weekdays.forEach(function(value) {
 		timetable.columns += value.dayColumns.length
 	}) 
-	// return the timeblel
+	// return the timetable
 	return timetable
 }
 
-// Insert lecture, if it fits then it returns true otherwise false
+// Insert lecture, if it fits in a already existing column then it returns true otherwise false
 function insertIn(dayColumn, lecture, subject) {
-	
 	if(dayColumn[""+lecture.startTime] == null && dayColumn[""+(lecture.startTime+1)] == null) {
 		dayColumn[""+lecture.startTime] = {
 			"subject" : subject,
@@ -87,7 +84,6 @@ function insertIn(dayColumn, lecture, subject) {
 		}
 		return true
 	}
-	
 	return false
 }
 
@@ -95,3 +91,17 @@ function createNewDayColumn() {
 	var object = new Array();
 	return object
 }
+
+function getDay(day) {
+	if (day === 'Montag')
+		return 1;
+	if (day === 'Dienstag')
+		return 2;
+	if (day === 'Mittwoch')
+		return 3;
+	if (day === 'Donnerstag')
+		return 4;
+	if (day === 'Freitag')
+		return 5;
+}
+

@@ -1,6 +1,6 @@
 html {
 	height: 100%;
-  font-family: 'Ubuntu',Tahoma,sans-serif;
+	font-family: 'Ubuntu',Tahoma,sans-serif;
 }
 
 body {
@@ -8,12 +8,9 @@ body {
 	background-repeat: repeat;
 	background-attachment: fixed;
 	background-position-x: 50%;
-	font-family: 'Nunito', sans-serif;
-  font-family: 'Ubuntu',Tahoma,sans-serif;
 	font-family: 'Lato', sans-serif;
 	color: #3f3f3f;
 	font-size: 13px;
-	
 }
 
 #headerwrap{
@@ -27,11 +24,10 @@ body {
 }
 
 #timetablewrapper {
-  width: 1200px;
+	width: 1200px;
 	margin: 40px auto 50px;
 	position: relative;
 	height: 570px;
-	
 }
 
 #selectionarea {
@@ -50,7 +46,6 @@ body {
 	padding-bottom: 10px;
 }
 
-
 #footerwrapper{
 	background-color: #3f3f3f;;
 	width: 100%;
@@ -68,15 +63,15 @@ body {
 	float: left;
 }
 
- 
+
 h1 {
-  font-size: 2em;
-  font-weight: bold;
-  color: #ffffff;
-  margin: 0px auto;
-  padding-top: 10px;
-  text-align: center;
-  min-width: 1200px;
+	font-size: 2em;
+	font-weight: bold;
+	color: #ffffff;
+	margin: 0px auto;
+	padding-top: 10px;
+	text-align: center;
+	min-width: 1200px;
 }
 
 h3 {
@@ -88,8 +83,6 @@ h5 {
 	margin-top: 7px;
 	margin-bottom: 9px;
 }
-
-
 
 .semesterButtonWrapper {
 	
@@ -113,41 +106,40 @@ h5 {
 }
 
 .semesterButtonWrapper:after {
-    position: absolute;
-    left: 0;
-    top: 38%;
-    height: 2px;
-    background: #3f3f3f;
-    content: "";
-    width: 28%;
-    display: block;
+	position: absolute;
+	left: 0;
+	top: 38%;
+	height: 2px;
+	background: #3f3f3f;
+	content: "";
+	width: 28%;
+	display: block;
 		
 }
 .semesterButton {
-    margin-top: 5px;
-	  background-color: #3f3f3f;
-    margin-bottom: 5px;
-	    width: 20px;
-	    height: 20px;
-	    border-radius: 10px;
-	    margin-left: 45px;
+	margin-top: 5px;
+	background-color: #3f3f3f;
+	margin-bottom: 5px;
+	width: 20px;
+	height: 20px;
+	border-radius: 10px;
+	margin-left: 45px;
 }
 
 .semesterButtonBig {
-	  background-color: #3f3f3f;
-		width: 28px;
-		height: 28px;
-		border-radius: 14px;
-		margin-left: 41px;
-		margin-top: 1px;
-		margin-bottom: 1px;
+	background-color: #3f3f3f;
+	width: 28px;
+	height: 28px;
+	border-radius: 14px;
+	margin-left: 41px;
+	margin-top: 1px;
+	margin-bottom: 1px;
 }
 
 .selectionButton {
 	height: 44px;
 	width: 44px;
 	padding-top: 0px;
-
 	margin-left: 670px; 
 	text-align: center;
 	background-color: #3f3f3f;
@@ -161,13 +153,6 @@ h5 {
 	background-color: #979797;
 }
 
-
-#allSelectionButton, #undoButton, #redoButton {
-	margin-left: 15px;
-}
-
-
-
 .selectionIcon {
 	height: 30px;
 	width: 30px;
@@ -178,11 +163,9 @@ h5 {
 	margin-left: 7px;
 }
 
-
 #removeIcon {
 	background-image: url("../img/removeSelection.png");
 }
-
 
 #creditsSum {
 	height: 32px;
@@ -207,10 +190,10 @@ h5 {
 	height: 50px;
 	background-color: #e8e8e8;
 	top: 0px;
-  text-align: center;
+	text-align: center;
 	padding-top: 20px;
-  font-size: 18px;
-  font-weight: bold;
+	font-size: 18px;
+	font-weight: bold;
 }
 
 .line {
@@ -262,7 +245,6 @@ h5 {
 	float: left;
 }
 
-
 .germanImage {
 	height: 18px;
 	width: 18px;
@@ -279,8 +261,6 @@ h5 {
 	float: left;
 	margin-right: 3px;
 }
-
-
 
 .twoWeek {
 	height: 18px;
@@ -312,6 +292,7 @@ h5 {
 	border-radius: 15px;
 	font-size: 11px;
 }
+
 .spacer {
 	height: 14px;
 	float: left;
@@ -352,7 +333,6 @@ h5 {
 	background-color: #DF8995;
 }
 
-
 #HU_Mathe{
 	background-color: #EFBB26;
 }
@@ -385,97 +365,88 @@ h5 {
 	background-color: #75c196;
 }
 
-
 .myCheckbox input {
-    display: none;
+	display: none;
 }
 
 .myCheckbox span {
-    width: 10px;
-    height: 10px;
-		border-radius: 2px;
-		float: left;
-    display: block;
-    background: white;
-		margin-right: 5px;
-		margin-top: 2px;
-		margin-left: 2px;
-    border-style: solid;
-    border-width: 1px;
+	width: 10px;
+	height: 10px;
+	border-radius: 2px;
+	float: left;
+	display: block;
+	background: white;
+	margin-right: 5px;
+	margin-top: 2px;
+	margin-left: 2px;
+	border-style: solid;
+	border-width: 1px;
 }
-/*
-.myCheckbox span:hover {
-    background: #4EB2C1
-} 
 
-.myCheckbox input:checked + span:hover {
-    background: white !important
-}
-*/
 .myCheckbox input:checked + span {
-    background: #4EB2C1
+	background: #4EB2C1
 }
 
 .myCheckbox span#TU_Span{
-    border-color: #DEB196;
+	border-color: #DEB196;
 }
 
 .myCheckbox input:checked + span#TU_Span{
-    background: #DEB196
+	background: #DEB196
 }
 
 .myCheckbox span#HU_WiWi_Span{
-    border-color: #4EB2C1;
+	border-color: #4EB2C1;
 }
 
 .myCheckbox input:checked + span#HU_WiWi_Span{
-    background: #4EB2C1
+	background: #4EB2C1
 }
 
 .myCheckbox span#FU_Span{
-    border-color: #7A64B2;
+	border-color: #7A64B2;
 }
 
 .myCheckbox input:checked + span#FU_Span{
-    background: #7A64B2
+	background: #7A64B2
 }
 
 .myCheckbox span#HU_Lebenswissenschaften_Span{
-    border-color: #D56272;
+	border-color: #D56272;
 }
 
 .myCheckbox input:checked + span#HU_Lebenswissenschaften_Span{
-    background: #D56272
+	background: #D56272
 }
 
 .myCheckbox span#HU_Mathe_Span{
-    border-color: #EFBB26;
+	border-color: #EFBB26;
 }
 
 .myCheckbox input:checked + span#HU_Mathe_Span{
-    background: #EFBB26
+	background: #EFBB26
 }
 
 .myCheckbox span#HU_Informatik_Span{
-    border-color: #CB282C;
+	border-color: #CB282C;
 }
 
 .myCheckbox input:checked + span#HU_Informatik_Span{
-    background: #CB282C
+	background: #CB282C
 }
 
 .myCheckbox span#Charite_Span{
-    border-color: #CB282C;
+	border-color: #CB282C;
 }
 
 .myCheckbox input:checked + span#Charite_Span{
-    background: #CB282C
+	background: #CB282C
 }
 
 .myCheckbox span#WIAS_Span{
-    border-color: #3AA76A;
+	border-color: #3AA76A;
 }
 
 .myCheckbox input:checked + span#WIAS_Span{
-    background: #3AA76A
+	background: #3AA76A
 }

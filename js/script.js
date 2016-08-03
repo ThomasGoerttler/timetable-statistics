@@ -7,15 +7,12 @@ var widthOfHourText = 50
 var subjects
 var currentSemester = ""
 var SAVED_SUBJECTS = "savedSubjectsUpdate02"
-
 var start = true
-
 var savedSubjects
 
 jQuery(document).ready(
 	function() {
 		refresh()
-		//$( document ).tooltip();
 	});
 	
 function refresh() {
@@ -24,7 +21,6 @@ function refresh() {
 	$('#selectionarea2').empty()
 	$('#selectionarea3').empty()
 	$('#timetablewrapper').empty()
-	
 	
 	// This block finds out the semester being latestly worked on; defaultly the current semester
 	if(typeof(Storage) !== "undefined") {
@@ -37,9 +33,7 @@ function refresh() {
 	} else {
 		currentSemester = CURRENT_SEMESTER
 	}
-	
 	subjects = getSubjectsForSemester(currentSemester)
-	
 	
 	// At the start
 	if (start) {
@@ -91,7 +85,7 @@ function refresh() {
 	}
 	
 	var timetableModel = createNewTimetable(subjects)
-	showSelectionArea()
+	createSelectionArea()
 	createHorizontalLinesAndHourDescription();
 	showTimetable(timetableModel)
 	highlightButton($("#" + currentSemester.toLowerCase() + "Button"))
@@ -141,7 +135,6 @@ function createHorizontalLinesAndHourDescription() {
 function showTimetable(timetable) {
 	
 	var containerDiv = document.getElementById("timetablewrapper")
-
 	// First vertical Line
 	var verticalLine = createDiv("line")
 	verticalLine.style.width = space + "px"
@@ -150,45 +143,29 @@ function showTimetable(timetable) {
 	verticalLine.style.left = widthOfHourText + "px"
 	containerDiv.appendChild(verticalLine);
 	
-	var columnNumber = 0 // Iterator over the day columns.
+	$("#creditsSum").text(timetable.creditSum + " SP")
 	
-  $("#creditsSum").text(timetable.creditSum + " SP")
-	
-	
-	$("#ws2015Button").click(function() {
-
-		localStorage.setItem("currentSemesterStore", "WS2015")
-		start = true
-		dehighlightButton($("#ss2016Button"))
-		dehighlightButton($("#ws2016Button"))
-		highlightButton($("#ws2015Button"))
-		refresh()
+	// Set action of semester buttons
+	semesters = ["WS2015", "SS2016", "WS2016"]
+	semesters.forEach(function(semester){
+		button_name = "#" + semester.toLowerCase() + "Button"
+		$(button_name).click(function() {
+			localStorage.setItem("currentSemesterStore", semester)
+			start = true
+			highlightButton($(button_name))
+			refresh()
+		})
 	})
 	
-	$("#ss2016Button").click(function() {
-		localStorage.setItem("currentSemesterStore", "SS2016")
-		start = true
-		highlightButton($("#ss2016Button"))
-		dehighlightButton($("#ws2015Button"))
-		dehighlightButton($("#ws2016Button"))
-		refresh()
-	})
-	
-	$("#ws2016Button").click(function() {
-		localStorage.setItem("currentSemesterStore", "WS2016")
-		start = true
-		highlightButton($("#ws2016Button"))
-		dehighlightButton($("#ws2015Button"))
-		dehighlightButton($("#ss2016Button"))
-		refresh()
-	})
-	
+	// Set action of empty selection Button
 	$("#emptySelectionButton").click(function() {
 		setAllSubjectsOn(false)
 		refresh(false)
 		savedSubjects.subjects = []
 		localStorage.setItem(SAVED_SUBJECTS+currentSemester, JSON.stringify(savedSubjects))
 	})
+	
+	var columnNumber = 0 // Iterator over the day columns They are not the same as the weekday colums, as a weekday can have more than one column
 	
 	timetable.weekdays.forEach(function(weekday) {
 		
@@ -249,7 +226,6 @@ function showTimetable(timetable) {
 						
 						if (hour.lecture.duration == "4")
 							iconContainer.style.marginTop = "41px"
-					
 						//credits
 						var credits = createDiv("credits")
 						if(hour.subject.sp !== "-1")
@@ -257,25 +233,21 @@ function showTimetable(timetable) {
 						else
 							credits.appendChild(document.createTextNode("?"))
 						iconContainer.appendChild(credits)
-					
 						//Type of the lecutre
 						var type = createDiv("lectureType")
 						type.appendChild(document.createTextNode(hour.lecture.type))
 						iconContainer.appendChild(type)
-					
 						// maybe text
 						var spacer = createDiv("spacer")
 						spacer.style.width = lectureWidth - 4 * 20.5 + "px"
 						if (hour.lecture.hasAlternative)
 							spacer.appendChild(document.createTextNode("! "))
 						iconContainer.appendChild(spacer)
-					
 						//weekly
 						var weekly = createDiv("oneWeek")
 						if (hour.subject.twoWeeks)
 							weekly.className = "twoWeek"
 						iconContainer.appendChild(weekly)
-					
 						// Language
 						var language = createDiv("germanImage")
 						if (hour.subject.language === "english")
@@ -284,11 +256,9 @@ function showTimetable(timetable) {
 						
 						lecture.appendChild(iconContainer)
 					}
-					
 					containerDiv.appendChild(lecture);
 				}
 			})
-			
 			// Vertical Line after Day Column
 			var verticalLine = createDiv("line")
 			verticalLine.style.width = space + "px"
@@ -300,25 +270,13 @@ function showTimetable(timetable) {
 			columnNumber += 1
 		})
 	})
-}
-
-function stringTillEnd(text, count) {
-	if (text.length <= count)
-		return text
-	var newText = text.substr(0,count-3)
-	newText += "..."
-	return newText
-}
-
-function createDiv(cssClass) {
-	var div = document.createElement("div");
-	div.setAttribute("class", cssClass);
-	return div;
-}
-
-
-function showSelectionArea() {
-	createSelectionArea()
+	function stringTillEnd(text, count) {
+		if (text.length <= count)
+			return text
+		var newText = text.substr(0,count-3)
+		newText += "..."
+		return newText
+	}
 }
 
 /*
@@ -357,7 +315,7 @@ function createSelectionArea() {
 			timetablewrapperCategoryArea = '<h3>' + category.main + '</h3>' + timetablewrapperCategoryArea
 			$('#selectionarea' + columnNumber).append(timetablewrapperCategoryArea)
 		}
-		if ($.inArray(category.main, getCategoryBreakForSemester(currentSemester)) > -1)
+		if ($.inArray(category.main, data.breaks[currentSemester]) > -1)
 		 	columnNumber++
 	})
 	
@@ -377,12 +335,8 @@ function createSelectionArea() {
 			refresh();
 			updateInLocalStorage($(this).attr('id'), "lecture")
 		}
-		
-		
-
 	});
 }
-
 
 /*
 * Update cookies
@@ -411,12 +365,8 @@ function updateInLocalStorage (subject, type) {
 	}
 	
 	if(typeof(Storage) !== "undefined") {
-
 		localStorage.setItem(SAVED_SUBJECTS+currentSemester, JSON.stringify(savedSubjects))
-
 	} 
-	// Update the 
-	
 }
 
 /*
@@ -503,39 +453,33 @@ function changeCheckedStatus(subjectName) {
 }
 
 function getSubjectsForSemester(semester) {
-	if (semester === "WS2015") {
-		return data.subjectsWS2015
-	} else if (semester === "SS2016") {
-		return data.subjectsSS2016
-	}	else if (semester === "WS2016") {
-		return data.subjectsWS2016
-	}
-}
-
-function getCategoryBreakForSemester(semester) {
-	if (semester === "WS2015") {
-		return data.breaks.WS2015
-	} else if (semester === "SS2016") {
-		return data.breaks.SS2016
-	}else if (semester === "WS2016") {
-		return data.breaks.WS2016
-	}
+	key = "subjects" + semester
+	return data[key]
 }
 
 function getDefaultSubjectsForSemester(semester) {
-	if (semester === "WS2015") {
-		return defaultSavedSubjects.subjectsWS2015
-	} else if (semester === "SS2016") {
-		return defaultSavedSubjects.subjectsSS2016
-	}else if (semester === "WS2016") {
-		return defaultSavedSubjects.subjectsWS2016
-	}
+	key = "subjects" + semester
+	return defaultSavedSubjects[key]
 }
 
 function highlightButton(button) {
+	// dehilight the all buttons first
+	$('.semesterButton').each(function(i, obj) {
+		dehighlightButton($("#" + obj.id))
+	});
+	
 	button.addClass("semesterButtonBig")
+	
+	function dehighlightButton(button) {
+		button.removeClass("semesterButtonBig")
+	}
 }
 
-function dehighlightButton(button) {
-	button.removeClass("semesterButtonBig")
+// HELPER
+
+function createDiv(cssClass) {
+	var div = document.createElement("div");
+	div.setAttribute("class", cssClass);
+	return div;
 }
+
