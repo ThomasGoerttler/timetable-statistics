@@ -40,7 +40,6 @@ function refresh() {
 		if(typeof(Storage) !== "undefined") {
 			
 			if (localStorage.getItem(SAVED_SUBJECTS+currentSemester) != null ) {
-
 				var selectionString = localStorage.getItem(SAVED_SUBJECTS+currentSemester)
 				savedSubjects = JSON.parse(selectionString)
 			} else {
@@ -337,8 +336,7 @@ function createSelectionArea() {
 	
 	function checkboxIsTutorialButton(object) {
 		return $(object).attr('id').includes('tutorial') 
-	}
-	
+	}	
 }
 
 /*
